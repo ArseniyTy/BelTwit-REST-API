@@ -9,7 +9,7 @@ namespace BelTwit_REST_API.Models.JWT
 {
     public class Signature : IEncoding
     {
-        private const string SecretKey = "MySecret";
+        public static string SecretKey { private get; set; }
         public string Token { get; set; }
 
         public Signature(Header header, Payload payload)

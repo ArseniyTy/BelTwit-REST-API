@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using BelTwit_REST_API.Models;
+using BelTwit_REST_API.Models.JWT;
 using Microsoft.EntityFrameworkCore;
 
 namespace BelTwit_REST_API
@@ -28,6 +29,10 @@ namespace BelTwit_REST_API
         public void ConfigureServices(IServiceCollection services)
         {
             string connectionStr = Configuration.GetConnectionString("DefaultConnection");
+
+            //устанавливаем секретный ключ для JWT из конфигурации
+            Signature.SecretKey = Configuration["JWTSecretKey"];
+
             services.AddDbContext<BelTwitContext>(options => options.UseSqlServer(connectionStr));
 
             services.AddControllers();

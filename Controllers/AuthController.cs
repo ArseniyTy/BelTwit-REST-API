@@ -77,10 +77,6 @@ namespace BelTwit_REST_API.Controllers
 
 
         /*
-         * https://jwt.io/
-         * https://jwt.io/introduction/
-
-         * + почітать про refresh JWT і так далее
          */
 
 
