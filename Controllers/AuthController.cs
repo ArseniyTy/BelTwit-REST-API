@@ -77,6 +77,26 @@ namespace BelTwit_REST_API.Controllers
 
 
         /*
+         * (Refresh = 60 days, access = 30 min)
+         * 
+         * 
+         * Создать таблицу RefreshToken(s) - поля GUID Token, DateTime expiresIn (можно вычітать даты еслі)
+         * AddDays(double value) - в конструкторе
+         * AddMinutes(double value) - для access
+         * 
+         * Связать one-to-many с user (refresh token на фронтэнде должен ставіться кукой, поэтому
+         * пользователь впрінціпе не должен с німі взаімодействовать, но у нас да, ты можешь сідеть с
+         * несколькіх токенов на одном компе).
+         * 
+         * Добавіть то, что еслі у одного юзера больше 5 токенов, то все сбрасываются, кроме новосозданной
+         * Нужно для безопасності.
+         * 
+         * Проверка на истёкший access(добавіть expiresIn в Payload)/refresh в authentificate
+         * TOKEN_EXPIRED/INVALID_REFRESH_SESSION - badrequest в ином случае
+         * 
+         * в authentificate в конце возвращаем объект из двух токенов access і refresh
+         * 
+         * Добавить POST auth/refresh-tokens (при истечении access/refresh)
          */
 
 
