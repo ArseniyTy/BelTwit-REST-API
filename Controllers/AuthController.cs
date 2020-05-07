@@ -91,7 +91,7 @@ namespace BelTwit_REST_API.Controllers
          * Добавіть то, что еслі у одного юзера больше 5 токенов, то все сбрасываются, кроме новосозданной
          * Нужно для безопасності. (отлавлівать ошібку тут нужно)
          * 
-         * [YOU ARE HERE] - напісать Даніку, что за ошібка. Разобраться ещё раз самому. Удалить если шо
+         * [YOU ARE HERE]
          * 
          * Проверка на истёкший access(добавіть expiresIn в Payload)/refresh в authentificate
          * TOKEN_EXPIRED/INVALID_REFRESH_SESSION - badrequest в ином случае
@@ -113,9 +113,26 @@ namespace BelTwit_REST_API.Controllers
                 return new ForbidResult("Password is incorrect");
 
 
+
             var JWT = new JWT(userFromDb);
-            return Ok(JWT.GetBase64Encoding());
-            //return Ok(JWT);
+
+            var refreshToken = new RefreshToken
+            {
+                TokenValue = new Guid(),
+                ExpiresAt = DateTime.Now.AddDays(60), //спустя 60 дней
+                UserId = userFromDb.Id,
+                User = userFromDb
+            };
+            _db.RefreshTokens.Add(refreshToken);
+            _db.SaveChanges();
+
+
+            var token = new AccessRefreshToken
+            {
+                AccessToken = JWT.GetBase64Encoding(),
+                RefreshToken = refreshToken.TokenValue.ToString()
+            };
+            return Ok(token);
         }
 
         [HttpGet("authorize")]
