@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using BelTwit_REST_API.Models;
-using BelTwit_REST_API.Models.JWT;
+using BelTwit_REST_API.Models.JWT_token;
 using BelTwit_REST_API.Additional;
 
 namespace BelTwit_REST_API.Controllers
@@ -91,12 +91,14 @@ namespace BelTwit_REST_API.Controllers
          * Добавіть то, что еслі у одного юзера больше 5 токенов, то все сбрасываются, кроме новосозданной
          * Нужно для безопасності. (отлавлівать ошібку тут нужно)
          * 
-         * [YOU ARE HERE]
-         * 
-         * Проверка на истёкший access(добавіть expiresIn в Payload)/refresh в authentificate
+         *  
+         * в authentificate в конце возвращаем объект из двух токенов access і refresh
+         *          
+         *     
+         *  [YOU ARE HERE]   
+         * Проверка на истёкший access(добавіть expiresIn в Payload)/refresh в authorize
          * TOKEN_EXPIRED/INVALID_REFRESH_SESSION - badrequest в ином случае
          * 
-         * в authentificate в конце возвращаем объект из двух токенов access і refresh
          * 
          * Добавить POST auth/refresh-tokens (при истечении access/refresh)
          */
@@ -127,28 +129,32 @@ namespace BelTwit_REST_API.Controllers
             _db.SaveChanges();
 
 
-            var token = new AccessRefreshToken
-            {
-                AccessToken = JWT.GetBase64Encoding(),
-                RefreshToken = refreshToken.TokenValue.ToString()
-            };
+            var token = new AccessRefreshToken(refreshToken, JWT);
             return Ok(token);
         }
 
         [HttpGet("authorize")]
-        public ActionResult AuthorizeUser([FromBody]string JWTToken)
+        public ActionResult AuthorizeUser([FromBody]AccessRefreshToken token)
         {
             JWT JWT;
             try
             {
-                JWT = new JWT(JWTToken);
+                JWT = new JWT(token.AccessToken);
             }
             catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return Ok(JWT);
-            //return Ok(JWT);
+
+
+
+            if (token.IsTokenExpired())
+            {
+                //нужно же ещё удалить его из дб тогда
+                return BadRequest("Token expired");
+            }
+
+            return Ok(token);
         }
     }
 }

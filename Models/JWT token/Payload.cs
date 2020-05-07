@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Text;
 using BelTwit_REST_API.Additional;
 
-namespace BelTwit_REST_API.Models.JWT
+namespace BelTwit_REST_API.Models.JWT_token
 {
     public class Payload : IEncoding
     {
