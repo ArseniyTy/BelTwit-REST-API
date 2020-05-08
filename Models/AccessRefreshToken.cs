@@ -52,5 +52,10 @@ namespace BelTwit_REST_API.Models
 
             return true;
         }
+
+        public void Update()
+        {
+            
+        }
     }
 }

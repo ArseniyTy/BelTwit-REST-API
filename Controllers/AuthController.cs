@@ -95,11 +95,11 @@ namespace BelTwit_REST_API.Controllers
          * в authentificate в конце возвращаем объект из двух токенов access і refresh
          *          
          *     
-         *  [YOU ARE HERE]   
+         * 
          * Проверка на истёкший access(добавіть expiresIn в Payload)/refresh в authorize
          * TOKEN_EXPIRED/INVALID_REFRESH_SESSION - badrequest в ином случае
          * 
-         * 
+         * [YOU ARE HERE]   
          * Добавить POST auth/refresh-tokens (при истечении access/refresh)
          */
 
@@ -154,6 +154,27 @@ namespace BelTwit_REST_API.Controllers
                 return BadRequest("Token expired");
             }
 
+            return Ok(token);
+        }
+        
+
+        //посмотреть на сайтіке что да как тут должно робіться
+        // наверное должны обновіть access, поставя дату другую. А так же еслі істёк refresh, то удаліть із бд 
+        // і что тогда? Тестіть можно установя addseconds(10)
+        [HttpPost("update-tokens")]
+        public ActionResult RefreshTokens([FromBody]AccessRefreshTokenJSON tokenJSON)
+        {
+            AccessRefreshToken token;
+            try
+            {
+                token = new AccessRefreshToken(tokenJSON);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            token.UpdateTokens();
             return Ok(token);
         }
     }
