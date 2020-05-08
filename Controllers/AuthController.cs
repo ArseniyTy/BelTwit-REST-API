@@ -129,7 +129,7 @@ namespace BelTwit_REST_API.Controllers
             _db.SaveChanges();
 
 
-            var token = new AccessRefreshToken(refreshToken, JWT);
+            var token = new AccessRefreshToken(refreshToken, JWT).ParseToJSON();
             return Ok(token);
         }
 

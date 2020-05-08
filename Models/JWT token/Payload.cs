@@ -11,12 +11,14 @@ namespace BelTwit_REST_API.Models.JWT_token
     {
         public Guid Sub { get; set; }
         public string Name { get; set; }
+        public DateTime Exp { get; set; }
         //"admin": true
 
         public Payload(Guid subject, string name)
         {
             Sub = subject;
             Name = name;
+            Exp = DateTime.Now.AddMinutes(30);
         }
 
         public Payload(string encodedPayload)
@@ -32,6 +34,7 @@ namespace BelTwit_REST_API.Models.JWT_token
             {
                 Sub = new Guid(props[0]);
                 Name = props[1];
+                Exp = DateTime.Parse(props[2].Replace('|', ':')); //заменяем |, которые мы установили в ToSting() для того, чтобы проісходіл нормальный Split здесь
             }
             catch (Exception ex)
             {
@@ -41,7 +44,7 @@ namespace BelTwit_REST_API.Models.JWT_token
 
         public override string ToString()
         {
-            return String.Format("sub:{0},name:{1}", Sub, Name);
+            return String.Format("sub:{0},name:{1},exp:{2}", Sub, Name, Exp.ToString().Replace(':','|'));
         }
 
         public string GetBase64Encoding()

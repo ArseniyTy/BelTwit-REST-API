@@ -33,9 +33,21 @@ namespace BelTwit_REST_API.Models
             AccessToken = access;
         }
 
+        public AccessRefreshTokenJSON ParseToJSON()
+        {
+            return new AccessRefreshTokenJSON
+            {
+                AccessToken = AccessToken.GetBase64Encoding(),
+                RefreshToken = RefreshToken.TokenValue.ToString()
+            };
+        }
+
         public bool IsTokenExpired()
         {
             if (RefreshToken.ExpiresAt > DateTime.Now)
+                return false;
+
+            if (AccessToken.PAYLOAD.Exp > DateTime.Now)
                 return false;
 
             return true;
