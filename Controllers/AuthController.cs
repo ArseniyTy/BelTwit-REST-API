@@ -134,12 +134,12 @@ namespace BelTwit_REST_API.Controllers
         }
 
         [HttpGet("authorize")]
-        public ActionResult AuthorizeUser([FromBody]AccessRefreshToken token)
+        public ActionResult AuthorizeUser([FromBody]AccessRefreshTokenJSON tokenJSON)
         {
-            JWT JWT;
+            AccessRefreshToken token;
             try
             {
-                JWT = new JWT(token.AccessToken);
+                token = new AccessRefreshToken(tokenJSON);
             }
             catch(Exception ex)
             {
