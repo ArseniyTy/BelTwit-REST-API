@@ -50,5 +50,13 @@ namespace BelTwit_REST_API.Models.JWT_token
                     $"{SIGNATURE.GetBase64Encoding()}";
         }
 
+
+        public bool IsTokenExpired()
+        {
+            if (PAYLOAD.Exp > DateTime.Now)
+                return false;
+
+            return true;
+        }
     }
 }

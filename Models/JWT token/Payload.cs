@@ -18,7 +18,7 @@ namespace BelTwit_REST_API.Models.JWT_token
         {
             Sub = subject;
             Name = name;
-            Exp = DateTime.Now.AddMinutes(30);
+            Exp = DateTime.Now.AddMinutes(30); //AddSeconds(20) - for testing
         }
 
         public Payload(string encodedPayload)

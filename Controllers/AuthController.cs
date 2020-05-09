@@ -115,31 +115,17 @@ namespace BelTwit_REST_API.Controllers
                 return new ForbidResult("Password is incorrect");
 
 
-
-            var JWT = new JWT(userFromDb);
-
-            var refreshToken = new RefreshToken
-            {
-                TokenValue = new Guid(),
-                ExpiresAt = DateTime.Now.AddDays(60), //спустя 60 дней
-                UserId = userFromDb.Id,
-                User = userFromDb
-            };
-            _db.RefreshTokens.Add(refreshToken);
-            _db.SaveChanges();
-
-
-            var token = new AccessRefreshToken(refreshToken, JWT).ParseToJSON();
+            var token = new AccessRefreshToken(userFromDb).ParseToJSON();
             return Ok(token);
         }
 
         [HttpGet("authorize")]
-        public ActionResult AuthorizeUser([FromBody]AccessRefreshTokenJSON tokenJSON)
+        public ActionResult AuthorizeUser([FromBody]string accessToken)
         {
-            AccessRefreshToken token;
+            JWT token;
             try
             {
-                token = new AccessRefreshToken(tokenJSON);
+                token = new JWT(accessToken);
             }
             catch(Exception ex)
             {
@@ -147,20 +133,19 @@ namespace BelTwit_REST_API.Controllers
             }
 
 
-
             if (token.IsTokenExpired())
             {
-                //нужно же ещё удалить его из дб тогда
                 return BadRequest("Token expired");
             }
 
             return Ok(token);
+            //return Ok(token.GetBase64Encoding());
         }
         
 
-        //посмотреть на сайтіке что да как тут должно робіться
-        // наверное должны обновіть access, поставя дату другую. А так же еслі істёк refresh, то удаліть із бд 
-        // і что тогда? Тестіть можно установя addseconds(10)
+        //можно передавать любой старый access, і он будет обновляться
+        //но это і не важно. Тут должна гарантіроваться лішь авторізованность
+        //і в целом хакер не сможет получіть доступ к update-tokens
         [HttpPost("update-tokens")]
         public ActionResult RefreshTokens([FromBody]AccessRefreshTokenJSON tokenJSON)
         {
@@ -168,14 +153,14 @@ namespace BelTwit_REST_API.Controllers
             try
             {
                 token = new AccessRefreshToken(tokenJSON);
+                token.UpdateTokens();
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
 
-            token.UpdateTokens();
-            return Ok(token);
+            return Ok(token.ParseToJSON());
         }
     }
 }
