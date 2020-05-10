@@ -2,8 +2,9 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using BelTwit_REST_API.Models;
-using BelTwit_REST_API.Models.JWT_token;
+using BelTwit_REST_API.Tokens.JWT_token;
 using BelTwit_REST_API.Additional;
+using BelTwit_REST_API.Tokens;
 
 namespace BelTwit_REST_API.Controllers
 {
@@ -77,10 +78,13 @@ namespace BelTwit_REST_API.Controllers
 
 
         /*
-         * Сліть ветку с мастером і запушіть на git
+         * 
+         * 
          * Создать логер для нынешніх действій (метаніт + проект Деніса)
-         * Создать документацію под этот контроллер
          * Потом уже ідті создавать і связывать twit
+         * 
+         * 
+         * 
          */
 
 

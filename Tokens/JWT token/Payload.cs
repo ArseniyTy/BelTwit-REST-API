@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
-using BelTwit_REST_API.Additional;
 
-namespace BelTwit_REST_API.Models.JWT_token
+namespace BelTwit_REST_API.Tokens.JWT_token
 {
     public class Payload : IEncoding
     {

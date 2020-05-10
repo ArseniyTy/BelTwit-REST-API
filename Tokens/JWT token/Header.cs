@@ -4,8 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
 using BelTwit_REST_API.Additional;
+using BelTwit_REST_API.Models;
 
-namespace BelTwit_REST_API.Models.JWT_token
+namespace BelTwit_REST_API.Tokens.JWT_token
 {
     public class Header : IEncoding
     {

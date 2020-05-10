@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BelTwit_REST_API.Models.JWT_token
+namespace BelTwit_REST_API.Tokens.JWT_token
 {
     interface IEncoding
     {

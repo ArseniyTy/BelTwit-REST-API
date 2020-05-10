@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using BelTwit_REST_API.Models;
-using BelTwit_REST_API.Models.JWT_token;
+using BelTwit_REST_API.Tokens.JWT_token;
 using Microsoft.EntityFrameworkCore;
 using BelTwit_REST_API.Additional;
 
