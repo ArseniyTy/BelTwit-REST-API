@@ -2,7 +2,7 @@
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using BelTwit_REST_API.Models;
-using BelTwit_REST_API.Models.JWT;
+using BelTwit_REST_API.Models.JWT_token;
 using BelTwit_REST_API.Additional;
 
 namespace BelTwit_REST_API.Controllers
@@ -77,10 +77,10 @@ namespace BelTwit_REST_API.Controllers
 
 
         /*
-         * https://jwt.io/
-         * https://jwt.io/introduction/
-
-         * + почітать про refresh JWT і так далее
+         * Сліть ветку с мастером і запушіть на git
+         * Создать логер для нынешніх действій (метаніт + проект Деніса)
+         * Создать документацію под этот контроллер
+         * Потом уже ідті создавать і связывать twit
          */
 
 
@@ -95,25 +95,52 @@ namespace BelTwit_REST_API.Controllers
                 return new ForbidResult("Password is incorrect");
 
 
-            var JWT = new JWT(userFromDb);
-            return Ok(JWT.GetBase64Encoding());
-            //return Ok(JWT);
+            var token = new AccessRefreshToken(userFromDb).ParseToJSON();
+            return Ok(token);
         }
 
         [HttpGet("authorize")]
-        public ActionResult AuthorizeUser([FromBody]string JWTToken)
+        public ActionResult AuthorizeUser([FromBody]string accessToken)
         {
-            JWT JWT;
+            JWT token;
             try
             {
-                JWT = new JWT(JWTToken);
+                token = new JWT(accessToken);
             }
             catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            return Ok(JWT);
-            //return Ok(JWT);
+
+
+            if (token.IsTokenExpired())
+            {
+                return BadRequest("Token expired");
+            }
+
+            return Ok(token);
+            //return Ok(token.GetBase64Encoding());
+        }
+        
+
+        //можно передавать любой старый access, і он будет обновляться
+        //но это і не важно. Тут должна гарантіроваться лішь авторізованность
+        //і в целом хакер не сможет получіть доступ к update-tokens
+        [HttpPost("update-tokens")]
+        public ActionResult RefreshTokens([FromBody]AccessRefreshTokenJSON tokenJSON)
+        {
+            AccessRefreshToken token;
+            try
+            {
+                token = new AccessRefreshToken(tokenJSON);
+                token.UpdateTokens();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+            return Ok(token.ParseToJSON());
         }
     }
 }

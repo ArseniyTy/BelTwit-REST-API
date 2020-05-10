@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using System.Text;
 using BelTwit_REST_API.Additional;
 
-namespace BelTwit_REST_API.Models.JWT
+namespace BelTwit_REST_API.Models.JWT_token
 {
     public class Signature : IEncoding
     {
-        private const string SecretKey = "MySecret";
+        public static string SecretKey { private get; set; }
         public string Token { get; set; }
 
         public Signature(Header header, Payload payload)

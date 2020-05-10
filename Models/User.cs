@@ -25,5 +25,13 @@ namespace BelTwit_REST_API.Models
         [DataMember]
         public string Password { get; set; }
         public string PasswordSalt { get; set; }
+
+
+        //[MaxLength(5,ErrorMessage = "There can be not more than 5 tokens")]
+        public IList<RefreshToken> RefreshTokens { get; set; }
+        public User()
+        {
+            RefreshTokens = new List<RefreshToken>();
+        }
     }
 }
