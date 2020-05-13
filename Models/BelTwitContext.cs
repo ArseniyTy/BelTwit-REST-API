@@ -7,6 +7,7 @@ namespace BelTwit_REST_API.Models
     {
         public DbSet<User> Users{ get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<Log> Logs { get; set; }
 
         public BelTwitContext(DbContextOptions<BelTwitContext> options)
             : base (options)

@@ -5,6 +5,9 @@ using BelTwit_REST_API.Models;
 using BelTwit_REST_API.Tokens.JWT_token;
 using BelTwit_REST_API.Additional;
 using BelTwit_REST_API.Tokens;
+using Microsoft.Extensions.Logging;
+using BelTwit_REST_API.Logging;
+using System.Collections.Generic;
 
 namespace BelTwit_REST_API.Controllers
 {
@@ -13,10 +16,22 @@ namespace BelTwit_REST_API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly BelTwitContext _db;
+        private ILogger _logger;
 
-        public AuthController(BelTwitContext context)
+        public AuthController(BelTwitContext context, ILoggerFactory loggerFactory)
         {
             _db = context;
+            _logger = loggerFactory.CreateLogger("DatabaseLogger");
+
+            _logger.LogError(new Exception("It is ex"), "Logger created");
+        }
+
+
+        [HttpGet]
+        public IEnumerable<User> GetUsers()
+        {
+            var users = _db.Users.ToList();
+            return users;
         }
 
         [HttpPost("create")]

@@ -14,6 +14,7 @@ using BelTwit_REST_API.Models;
 using BelTwit_REST_API.Tokens.JWT_token;
 using Microsoft.EntityFrameworkCore;
 using BelTwit_REST_API.Additional;
+using BelTwit_REST_API.Logging;
 
 namespace BelTwit_REST_API
 {
@@ -51,12 +52,15 @@ namespace BelTwit_REST_API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            //метод расшіренія, созданный намі
+            loggerFactory.AddDatabase(new BelTwitContext(Helper.BelTwitDbOptions));
 
             app.UseHttpsRedirection();
 
