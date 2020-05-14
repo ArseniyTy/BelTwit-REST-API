@@ -23,7 +23,7 @@ namespace BelTwit_REST_API.Controllers
             _db = context;
             _logger = loggerFactory.CreateLogger("DatabaseLogger");
 
-            _logger.LogError(new Exception("It is ex"), "Logger created");
+            _logger.LogInformation("LOGGER");
         }
 
 

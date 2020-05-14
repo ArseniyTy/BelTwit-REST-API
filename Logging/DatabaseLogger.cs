@@ -37,7 +37,7 @@ namespace BelTwit_REST_API.Logging
                 LogLevel = logLevel.ToString()
             };
             _db.Logs.Add(log);
-            _db.SaveChanges();
+            _db.SaveChanges();  //ORDER BY Date чтобы нормально просматрівать
         }
 
         
