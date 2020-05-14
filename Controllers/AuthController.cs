@@ -27,6 +27,7 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
+        //в будущем только для admin + возможность получіть одного передавая модельку
         [HttpGet]
         public IEnumerable<User> GetUsers()
         {

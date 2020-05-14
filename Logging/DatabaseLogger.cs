@@ -40,6 +40,11 @@ namespace BelTwit_REST_API.Logging
             _db.SaveChanges();  //ORDER BY Date чтобы нормально просматрівать
         }
 
-        
+
+        /*
+         * Можно добавіть метод LogUser - который будет о user інфу в нужном формате запісывать (он вызывает обычный log.info)
+         * Можно добавіть поля в модель: Adress(api/created :ex), HttpMethod(Post/Get...), 
+         */
+
     }
 }
