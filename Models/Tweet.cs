@@ -15,13 +15,24 @@ namespace BelTwit_REST_API.Models
 
 
         //storing in Database
-        public string CommentsDb { get; set; }
+        private string _commentsDb { get; set; }
         //not storing but easier to work with
         [NotMapped]
         public string[] Comments
         {
-            get { return CommentsDb.Split(';'); }
-            set { CommentsDb = string.Join(";", value); }
+            get 
+            {
+                if (_commentsDb == null)
+                    return null;
+                return _commentsDb.Split(';');
+            }
+            set 
+            {
+                if (value == null)
+                    _commentsDb = null;
+                else
+                    _commentsDb = string.Join(";", value); 
+            }
         }
 
 
