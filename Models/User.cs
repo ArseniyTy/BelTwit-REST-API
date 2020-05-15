@@ -27,11 +27,16 @@ namespace BelTwit_REST_API.Models
         public string PasswordSalt { get; set; }
 
 
-        //[MaxLength(5,ErrorMessage = "There can be not more than 5 tokens")]
+        public virtual IList<SubscriberSubscription> Subscribers { get; set; }    //подпісчікі
+        public virtual IList<SubscriberSubscription> Subscriptions { get; set; }  //подпіскі
+
+
         public IList<RefreshToken> RefreshTokens { get; set; }
         public User()
         {
             RefreshTokens = new List<RefreshToken>();
+            Subscribers= new List<SubscriberSubscription>();
+            Subscriptions = new List<SubscriberSubscription>();
         }
     }
 }

@@ -6,6 +6,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20200514182717_v0.4.cs" />
+    <Compile Remove="Migrations\20200514182717_v0.4.Designer.cs" />
+    <Compile Remove="Migrations\20200514182944_v0.4.2.cs" />
+    <Compile Remove="Migrations\20200514182944_v0.4.2.Designer.cs" />
+    <Compile Remove="Migrations\20200514183521_v0.4.2.cs" />
+    <Compile Remove="Migrations\20200514183521_v0.4.2.Designer.cs" />
+    <Compile Remove="Migrations\20200514183811_v0.4.3.cs" />
+    <Compile Remove="Migrations\20200514183811_v0.4.3.Designer.cs" />
+    <Compile Remove="Migrations\20200514183938_v0.4.cs" />
+    <Compile Remove="Migrations\20200514183938_v0.4.Designer.cs" />
+    <Compile Remove="Migrations\20200514184256_v0.4.2.cs" />
+    <Compile Remove="Migrations\20200514184256_v0.4.2.Designer.cs" />
+    <Compile Remove="Migrations\20200514190735_v0.4.1.cs" />
+    <Compile Remove="Migrations\20200514190735_v0.4.1.Designer.cs" />
+    <Compile Remove="Migrations\20200514192004_v0.4.cs" />
+    <Compile Remove="Migrations\20200514192004_v0.4.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.0.0-preview8.19405.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.3">
       <PrivateAssets>all</PrivateAssets>

@@ -8,8 +8,8 @@ namespace BelTwit_REST_API.Tokens.JWT_token
 {
     public class Payload : IEncoding
     {
-        public Guid Sub { get; set; }
-        public string Name { get; set; }
+        public Guid Sub { get; set; }   //user id
+        public string Name { get; set; }    //user login
         public DateTime Exp { get; set; }
         //"admin": true
 
