@@ -102,14 +102,16 @@ namespace BelTwit_REST_API.Controllers
         }
 
         [HttpPost("subscribe")]
-        public ActionResult Subscribe([FromBody]Tuple<string, string> tuple)
+        public ActionResult Subscribe([FromBody]UserSubscribeJSON subInfo)
         {
-            var token = new JWT(tuple.Item1);
-            var userWhoSubscribe = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            var token = new JWT(subInfo.JWT);
+            var userWhoSubscribe = _db.Users
+                .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
             if (userWhoSubscribe == null)
                 return BadRequest("No user that matches this JWT");
 
-            var userToSubscribe = _db.Users.FirstOrDefault(p => p.Login == tuple.Item2);
+            var userToSubscribe = _db.Users
+                .FirstOrDefault(p => p.Login == subInfo.OtherUserLogin);
             if (userToSubscribe == null)
                 return BadRequest("No user that matches you entered login");
 
@@ -125,14 +127,14 @@ namespace BelTwit_REST_API.Controllers
         }
 
         [HttpDelete("unsubscribe")]
-        public ActionResult Unsubscribe([FromBody]Tuple<string, string> tuple)
+        public ActionResult Unsubscribe([FromBody]UserSubscribeJSON subInfo)
         {
-            var token = new JWT(tuple.Item1);
+            var token = new JWT(subInfo.JWT);
             var userWhoSubscribe = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
             if (userWhoSubscribe == null)
                 return BadRequest("No user that matches this JWT");
 
-            var userToSubscribe = _db.Users.FirstOrDefault(p => p.Login == tuple.Item2);
+            var userToSubscribe = _db.Users.FirstOrDefault(p => p.Login == subInfo.OtherUserLogin);
             if (userToSubscribe == null)
                 return BadRequest("No user in database that matches you entered login");
 
