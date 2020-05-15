@@ -27,7 +27,7 @@ namespace BelTwit_REST_API.Tokens
                 if (RefreshToken == null)
                     throw new Exception("Refesh token doesn't exist in database");
 
-                AccessToken = new JWT(accessToken);
+                AccessToken = new JWT(accessToken); //тут еслі что токен expired ошібка выскочіт
             }
             
         }

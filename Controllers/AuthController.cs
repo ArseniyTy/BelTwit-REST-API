@@ -66,7 +66,16 @@ namespace BelTwit_REST_API.Controllers
         [HttpGet("get-subscriptions")]
         public ActionResult GetSubscriptions([FromBody]string accessToken)
         {
-            var token = new JWT(accessToken);
+            JWT token;
+            try
+            {
+                token = new JWT(accessToken);
+            }
+            catch (Exception ex) //token expired
+            {
+                return BadRequest(ex.Message);
+            }
+
             var user = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
             if (user == null)
                 return BadRequest("No user that matches this JWT");
@@ -85,7 +94,16 @@ namespace BelTwit_REST_API.Controllers
         [HttpGet("get-subscribers")]
         public ActionResult GetSubscribers([FromBody]string accessToken)
         {
-            var token = new JWT(accessToken);
+            JWT token;
+            try
+            {
+                token = new JWT(accessToken);
+            }
+            catch (Exception ex) //token expired
+            {
+                return BadRequest(ex.Message);
+            }
+
             var user = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
             if (user == null)
                 return BadRequest("No user that matches this JWT");
@@ -104,7 +122,16 @@ namespace BelTwit_REST_API.Controllers
         [HttpPost("subscribe")]
         public ActionResult Subscribe([FromBody]UserSubscribeJSON subInfo)
         {
-            var token = new JWT(subInfo.JWT);
+            JWT token;
+            try
+            {
+                token = new JWT(subInfo.JWT);
+            }
+            catch (Exception ex) //token expired
+            {
+                return BadRequest(ex.Message);
+            }
+
             var userWhoSubscribe = _db.Users
                 .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
             if (userWhoSubscribe == null)
@@ -129,7 +156,16 @@ namespace BelTwit_REST_API.Controllers
         [HttpDelete("unsubscribe")]
         public ActionResult Unsubscribe([FromBody]UserSubscribeJSON subInfo)
         {
-            var token = new JWT(subInfo.JWT);
+            JWT token;
+            try
+            {
+                token = new JWT(subInfo.JWT);
+            }
+            catch(Exception ex) //token expired
+            {
+                return BadRequest(ex.Message);
+            }
+
             var userWhoSubscribe = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
             if (userWhoSubscribe == null)
                 return BadRequest("No user that matches this JWT");
@@ -223,17 +259,6 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
-        /*
-         * 
-         * 
-         * Создать логер для нынешніх действій (метаніт + проект Деніса)
-         * Потом уже ідті создавать і связывать twit
-         * 
-         * 
-         * 
-         */
-
-
         [HttpPost("authentificate")]
         public ActionResult AuthentificateUser([FromBody]User user)
         {
@@ -260,12 +285,6 @@ namespace BelTwit_REST_API.Controllers
             catch(Exception ex)
             {
                 return BadRequest(ex.Message);
-            }
-
-
-            if (token.IsTokenExpired())
-            {
-                return BadRequest("Token expired");
             }
 
             return Ok(token);

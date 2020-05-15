@@ -33,9 +33,10 @@ namespace BelTwit_REST_API.Tokens.JWT_token
 
                 var SignatureCorrect = new Signature(HEADER, PAYLOAD);
                 if(SIGNATURE.Token!= SignatureCorrect.Token)
-                {
                     throw new Exception("Signatures do not match!!!");
-                }
+                if(IsTokenExpired())
+                    throw new Exception("JWT Token expired");
+
             }
             catch (Exception ex)
             {
