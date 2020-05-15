@@ -8,6 +8,42 @@ using BelTwit_REST_API.Tokens;
 using Microsoft.Extensions.Logging;
 using BelTwit_REST_API.Logging;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+
+/*General:
+ * Разделение на роли: у админа должна быть возможность редактировать все поля
+ * http://localhost:port main get request -> инфа о сервисе (документация) - лучше head
+ * 
+ * твиттер
+ - у юзера есть возможность добавлять твит
+ - подписываться на других юзеров
+ - получать все твиты на подписаных юзеров
+ - ретвит
+ - комменты и лайки к твитам
+ */
+
+
+/*Twitter:
+ * Моделька твіта:
+ *                  string Content (sama zapic)
+ *                  List<string> Comments
+ *                  Int Likes, Dislikes
+ *                  
+ * Connection with User:    one-to-many
+ *              + add field     User RetweetedFrom      dly retwitov (u sozdateley null pust budet)
+ */
+
+
+/*User:                   
+* Role=admin(system enum)  - get all ...
+*/
+
+
+/*TwitterController:                  
+ * GET
+*/
+
+
 
 namespace BelTwit_REST_API.Controllers
 {
@@ -23,8 +59,100 @@ namespace BelTwit_REST_API.Controllers
             _db = context;
             _logger = loggerFactory.CreateLogger("DatabaseLogger");
 
-            _logger.LogInformation("LOGGER");
+           // _logger.LogInformation("LOGGER");
         }
+
+
+        [HttpGet("get-subscriptions")]
+        public ActionResult GetSubscriptions([FromBody]string accessToken)
+        {
+            var token = new JWT(accessToken);
+            var user = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (user == null)
+                return BadRequest("No user that matches this JWT");
+
+
+            _db.Entry(user).Collection(p => p.Subscriptions).Load();
+            //выбірает всех, кто есть в бд
+            var subscriptions = user.Subscriptions
+                .Where(p => _db.Users.FirstOrDefault(i => i.Id == p.OnWhomSubscribeId)!=null)
+                .Select(p => _db.Users.FirstOrDefault(i => i.Id == p.OnWhomSubscribeId))
+                .ToList();
+
+            return Ok(subscriptions);
+        }
+
+        [HttpGet("get-subscribers")]
+        public ActionResult GetSubscribers([FromBody]string accessToken)
+        {
+            var token = new JWT(accessToken);
+            var user = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (user == null)
+                return BadRequest("No user that matches this JWT");
+
+
+            _db.Entry(user).Collection(p => p.Subscribers).Load();
+            //выбірает всех, кто есть в бд
+            var subscribers = user.Subscribers
+                .Where(p => _db.Users.FirstOrDefault(i => i.Id == p.WhoSubscribeId) != null)
+                .Select(p => _db.Users.FirstOrDefault(i => i.Id == p.WhoSubscribeId))
+                .ToList();
+
+            return Ok(subscribers);
+        }
+
+        [HttpPost("subscribe")]
+        public ActionResult Subscribe([FromBody]Tuple<string, string> tuple)
+        {
+            var token = new JWT(tuple.Item1);
+            var userWhoSubscribe = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (userWhoSubscribe == null)
+                return BadRequest("No user that matches this JWT");
+
+            var userToSubscribe = _db.Users.FirstOrDefault(p => p.Login == tuple.Item2);
+            if (userToSubscribe == null)
+                return BadRequest("No user that matches you entered login");
+
+            var subSub = new SubscriberSubscription
+            {
+                WhoSubscribeId = userWhoSubscribe.Id,
+                OnWhomSubscribeId = userToSubscribe.Id
+            };
+            _db.SubscriberSubscriptions.Add(subSub);
+            _db.SaveChanges();
+
+            return Ok(subSub);
+        }
+
+        [HttpDelete("unsubscribe")]
+        public ActionResult Unsubscribe([FromBody]Tuple<string, string> tuple)
+        {
+            var token = new JWT(tuple.Item1);
+            var userWhoSubscribe = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (userWhoSubscribe == null)
+                return BadRequest("No user that matches this JWT");
+
+            var userToSubscribe = _db.Users.FirstOrDefault(p => p.Login == tuple.Item2);
+            if (userToSubscribe == null)
+                return BadRequest("No user in database that matches you entered login");
+
+            var subSub = _db.SubscriberSubscriptions
+                .FirstOrDefault(p => p.WhoSubscribeId == userWhoSubscribe.Id
+                                  && p.OnWhomSubscribeId == userToSubscribe.Id);
+            if (subSub == null)
+                return BadRequest("You are not subscribed to this user");
+
+            _db.SubscriberSubscriptions.Remove(subSub);
+            _db.SaveChanges();
+            return Ok(subSub);
+        }
+
+
+
+
+
+
+
 
 
         //в будущем только для admin + возможность получіть одного передавая модельку

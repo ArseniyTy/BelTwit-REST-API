@@ -6,6 +6,7 @@ namespace BelTwit_REST_API.Models
     public class BelTwitContext : DbContext
     {
         public DbSet<User> Users{ get; set; }
+        public DbSet<SubscriberSubscription> SubscriberSubscriptions { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Log> Logs { get; set; }
 
@@ -29,6 +30,27 @@ namespace BelTwit_REST_API.Models
                 .WithOne(p => p.User)
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
+
+
+
+            modelBuilder.Entity<SubscriberSubscription>()
+                .HasKey(p => new { p.WhoSubscribeId, p.OnWhomSubscribeId });
+
+
+            //NO: nothing when deleting!!! (but only that is possible)
+            modelBuilder.Entity<SubscriberSubscription>()
+                .HasOne(p => p.WhoSubscribe)
+                .WithMany(p => p.Subscriptions)
+                .HasForeignKey(p => p.WhoSubscribeId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<SubscriberSubscription>()
+                .HasOne(p => p.OnWhomSubscribe)
+                .WithMany(p => p.Subscribers)
+                .HasForeignKey(p => p.OnWhomSubscribeId);
+
         }
     }
 }
