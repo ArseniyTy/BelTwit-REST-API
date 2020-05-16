@@ -25,6 +25,7 @@
 | GET    | api/twitter/getById/{id}      || Get tweet by "id".
 | GET    | api/twitter/getByLogin/{login}|| Get all tweets of user with "login".
 | POST   | api/twitter                   |[JwtWithTweet model](#jwtwithtweet-json-model)| Creates a user tweet. JWT and Tweet (Content at least) required.
+| DELETE | api/twitter   				 |[JwtWithTweetId model](#jwtwithtweetid-json-model)| Deletes a user tweet. JWT and TweetId required.
 
 
 
@@ -71,5 +72,12 @@
   "Object": {
 	  "Content": "It is my tweet"
   }
+}
+```
+#### JwtWithTweetId JSON model:
+```json
+{
+  "JWT": "yourJWTValue",
+  "Object": "yourTweetId"
 }
 ```

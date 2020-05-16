@@ -11,10 +11,6 @@ using Microsoft.EntityFrameworkCore;
 
 
 /*TwitterController:
- * DELETE(jwt) - remove tweet
- * PUT(jwt) - change tweet
- * 
- * 
  * POST(Id tweet-a) - write comment
  * POST(Id) - put like tweet
  * POST(Id) - put dislike tweet
@@ -96,6 +92,14 @@ namespace BelTwit_REST_API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            var user = _db.Users
+                .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (user == null)
+                return NotFound("Your jwt doesn't match any user!");
+
+
+
+
 
             var tweetJSON = jwtWithTweet.Object;
             if (tweetJSON == null)
@@ -113,6 +117,96 @@ namespace BelTwit_REST_API.Controllers
             }
 
             _db.Tweets.Add(tweet);
+            _db.SaveChanges();
+
+            return Ok(tweet);
+        }
+
+
+
+
+        //[HttpPost]
+        //public ActionResult WriteCommentToTweet([FromBody]JwtWtihObject<Tweet> jwtWithTweet)
+        //{
+        //    JWT token;
+        //    try
+        //    {
+        //        token = new JWT(jwtWithTweet.JWT);
+        //    }
+        //    catch (Exception ex) //token expired
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //    var user = _db.Users
+        //        .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+        //    if (user == null)
+        //        return NotFound("Your jwt doesn't match any user!");
+
+
+
+
+
+        //    var tweetJSON = jwtWithTweet.Object;
+        //    if (tweetJSON == null)
+        //        return BadRequest("No tweet object in request");
+        //    tweetJSON.UserId = token.PAYLOAD.Sub;
+
+        //    Tweet tweet;
+        //    try
+        //    {
+        //        tweet = new Tweet(tweetJSON);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+
+        //    _db.Tweets.Add(tweet);
+        //    _db.SaveChanges();
+
+        //    return Ok(tweet);
+        //}
+
+
+
+        [HttpDelete]
+        public ActionResult DeleteTweet([FromBody]JwtWtihObject<string> jwtWithTweet)
+        {
+            JWT token;
+            try
+            {
+                token = new JWT(jwtWithTweet.JWT);
+            }
+            catch (Exception ex) //token expired
+            {
+                return BadRequest(ex.Message);
+            }
+            var user = _db.Users
+                .Include(p => p.Tweets)
+                .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (user == null)
+                return NotFound("Your jwt doesn't match any user!");
+
+
+
+
+            Guid tweetId;
+            try
+            {
+                tweetId = new Guid(jwtWithTweet.Object);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
+            var tweet = user.Tweets
+                .FirstOrDefault(p => p.Id == tweetId);
+            if (tweet == null)
+                return NotFound("You haven't tweet with such Id");
+
+            _db.Tweets.Remove(tweet);
             _db.SaveChanges();
 
             return Ok(tweet);
