@@ -41,5 +41,26 @@ namespace BelTwit_REST_API.Models
         public Guid UserId { get; set; }
         public User User { get; set; }
 
+
+        public Tweet() { }
+        public Tweet(Tweet tweetToCopy)
+        {
+            if (tweetToCopy == null)
+                throw new Exception("Tweet to copy from is null!");
+            
+            if(tweetToCopy.Content==null || tweetToCopy.Content.Length==0)
+                throw new Exception("Tweet tweet must have a content");
+            if (tweetToCopy.UserId == null)
+                throw new Exception("Tweet tweet must have an owner");
+
+            Id = new Guid();
+            Content = tweetToCopy.Content;
+            UserId = tweetToCopy.UserId;
+
+            Comments = tweetToCopy.Comments;
+            Likes = tweetToCopy.Likes;
+            Dislikes = tweetToCopy.Dislikes;
+            UserIdRetweetedFrom = tweetToCopy.UserIdRetweetedFrom;
+        }
     }
 }

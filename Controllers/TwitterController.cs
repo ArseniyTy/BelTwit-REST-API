@@ -11,16 +11,20 @@ using Microsoft.EntityFrameworkCore;
 
 
 /*TwitterController:
- * POST(jwt) - add tweet
  * DELETE(jwt) - remove tweet
  * PUT(jwt) - change tweet
- * GET(jwt) - get one tweet
- * GET(jwt) - get all tweets
  * 
- * GET(login) - get tweets of the other person 
+ * 
  * POST(Id tweet-a) - write comment
  * POST(Id) - put like tweet
  * POST(Id) - put dislike tweet
+ * 
+ * 
+ * * 
+ *\kak lenta novostey/
+ * GET - get all tweets of your subscriptions sorted by data  + доп параметр, сколько первых выбрать
+ * 
+ * 
  * 
  * POST - retweet (с указаніем retweeted from)
 */
@@ -94,18 +98,20 @@ namespace BelTwit_REST_API.Controllers
             }
 
             var tweetJSON = jwtWithTweet.Object;
-            //в ідеале clone ілі конструктор
-            var tweet = new Tweet
-            {
-                Id = new Guid(),
-                Content = tweetJSON.Content,
-                Comments = tweetJSON.Comments,
-                Likes = tweetJSON.Likes,
-                Dislikes = tweetJSON.Dislikes,
-                UserIdRetweetedFrom = tweetJSON.UserIdRetweetedFrom,
+            if (tweetJSON == null)
+                return BadRequest("No tweet object in request");
+            tweetJSON.UserId = token.PAYLOAD.Sub;
 
-                UserId = token.PAYLOAD.Sub
-            };
+            Tweet tweet;
+            try
+            {
+                tweet = new Tweet(tweetJSON);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
             _db.Tweets.Add(tweet);
             _db.SaveChanges();
 
