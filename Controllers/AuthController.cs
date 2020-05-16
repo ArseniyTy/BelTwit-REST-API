@@ -23,25 +23,10 @@ using Microsoft.EntityFrameworkCore;
  */
 
 
-/*Twitter:
- * Моделька твіта:
- *                  string Content (sama zapic)
- *                  List<string> Comments
- *                  Int Likes, Dislikes
- *                  
- * Connection with User:    one-to-many
- *              + add field     User RetweetedFrom      dly retwitov (u sozdateley null pust budet)
- */
-
-
 /*User:                   
 * Role=admin(system enum)  - get all ...
 */
 
-
-/*TwitterController:                  
- * GET
-*/
 
 
 

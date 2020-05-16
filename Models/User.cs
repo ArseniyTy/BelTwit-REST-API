@@ -29,6 +29,8 @@ namespace BelTwit_REST_API.Models
 
         public virtual IList<SubscriberSubscription> Subscribers { get; set; }    //подпісчікі
         public virtual IList<SubscriberSubscription> Subscriptions { get; set; }  //подпіскі
+        public virtual IList<Tweet> Tweets { get; set; }  //твіты
+
 
 
         public IList<RefreshToken> RefreshTokens { get; set; }
@@ -37,6 +39,7 @@ namespace BelTwit_REST_API.Models
             RefreshTokens = new List<RefreshToken>();
             Subscribers= new List<SubscriberSubscription>();
             Subscriptions = new List<SubscriberSubscription>();
+            Tweets = new List<Tweet>();
         }
     }
 }

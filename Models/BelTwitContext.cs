@@ -9,6 +9,7 @@ namespace BelTwit_REST_API.Models
         public DbSet<SubscriberSubscription> SubscriberSubscriptions { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Log> Logs { get; set; }
+        public DbSet<Tweet> Tweets { get; set; }
 
         public BelTwitContext(DbContextOptions<BelTwitContext> options)
             : base (options)
@@ -51,6 +52,14 @@ namespace BelTwit_REST_API.Models
                 .WithMany(p => p.Subscribers)
                 .HasForeignKey(p => p.OnWhomSubscribeId);
 
+
+
+
+            modelBuilder.Entity<Tweet>()
+                .HasOne(p => p.User)
+                .WithMany(p => p.Tweets)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

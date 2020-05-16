@@ -19,6 +19,15 @@
 
 
 
+## TwitterController
+| Method    | URL                                           | Body       | Description                                                 |
+| :-------: | :-------------------------------------------- | :--------- | :-----------------------------------------------------------|
+| GET    | api/twitter/getById/{id}      || Get tweet by "id".
+| GET    | api/twitter/getByLogin/{login}|| Get all tweets of user with "login".
+| POST   | api/twitter                   |[JwtWithTweet model](#jwtwithtweet-json-model)| Creates a user tweet. JWT and Tweet (Content at least) required.
+
+
+
 ## Controllers bodies:
 
 #### User JSON model:
@@ -53,5 +62,14 @@
 {
 	"JWT": "yourJWTValue",
 	"OtherUserLogin": "UserLogin"
+}
+```
+#### JwtWithTweet JSON model:
+```json
+{
+  "JWT": "yourJWTValue",
+  "Object": {
+	  "Content": "It is my tweet"
+  }
 }
 ```
