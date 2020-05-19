@@ -15,26 +15,25 @@ namespace BelTwit_REST_API.Models
 
 
         //storing in Database
-        private string _commentsDb { get; set; }
+        public string CommentsDb { get; set; }
         //not storing but easier to work with
         [NotMapped]
-        public string[] Comments
+        public List<string> Comments
         {
             get 
             {
-                if (_commentsDb == null)
-                    return null;
-                return _commentsDb.Split(';');
+                if (CommentsDb == null)
+                    return new List<string>();
+                return CommentsDb.Split(';').ToList();
             }
             set 
             {
                 if (value == null)
-                    _commentsDb = null;
+                    CommentsDb = null;
                 else
-                    _commentsDb = string.Join(";", value); 
+                    CommentsDb = string.Join(";", value); 
             }
         }
-
 
 
         public Guid UserIdRetweetedFrom { get; set; }
