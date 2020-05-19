@@ -181,6 +181,54 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
+        //можно сколько хочешь лайкать от одного чувака + ещё надо, чтобы отменить лайк 
+        //+ чтобы нельзя лайк і дізлайк одновременно
+
+        //ПРАПАНОВА: стварыць прамежутачую табліцу UserReaction дзе апісваецца пастваіў лайк
+        //ці дізлайк + камент к твіту
+        //связь паміж User і Tweet праз яе - many-to-many
+        [HttpPut("like-tweet")]
+        public ActionResult WriteCommentToTweet([FromBody]JwtWtihObject<Guid> jwtWithTweetId)
+        {
+            JWT token;
+            try
+            {
+                token = new JWT(jwtWithTweetId.JWT);
+            }
+            catch (Exception ex) //token expired
+            {
+                return BadRequest(ex.Message);
+            }
+            var user = _db.Users
+                .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (user == null)
+                return NotFound("Your jwt doesn't match any user!");
+
+
+
+
+            Guid tweetId;
+            try
+            {
+                tweetId = jwtWithTweetId.Object;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            var tweet = _db.Tweets
+                .FirstOrDefault(p => p.Id == tweetId);
+            if (tweet == null)
+                return NotFound("User doesn't have tweet with such Id");
+
+            tweet.Likes += 1;
+            _db.Tweets.Update(tweet);
+            _db.SaveChanges();
+
+            return Ok(tweet);
+        }
+
+
 
         [HttpDelete]
         public ActionResult DeleteTweet([FromBody]JwtWtihObject<string> jwtWithTweet)
