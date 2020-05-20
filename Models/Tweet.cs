@@ -41,8 +41,14 @@ namespace BelTwit_REST_API.Models
         public User User { get; set; }
 
 
-        public Tweet() { }
-        public Tweet(Tweet tweetToCopy)
+        public virtual IList<Reaction> TweetReactions { get; set; }  //твіты
+
+
+        public Tweet() 
+        {
+            TweetReactions = new List<Reaction>();
+        }
+        public Tweet(Tweet tweetToCopy) : base()
         {
             if (tweetToCopy == null)
                 throw new Exception("Tweet to copy from is null!");

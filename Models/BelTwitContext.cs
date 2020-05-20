@@ -10,6 +10,7 @@ namespace BelTwit_REST_API.Models
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Log> Logs { get; set; }
         public DbSet<Tweet> Tweets { get; set; }
+        public DbSet<Reaction> Reactions { get; set; }
 
         public BelTwitContext(DbContextOptions<BelTwitContext> options)
             : base (options)
@@ -38,9 +39,7 @@ namespace BelTwit_REST_API.Models
 
             modelBuilder.Entity<SubscriberSubscription>()
                 .HasKey(p => new { p.WhoSubscribeId, p.OnWhomSubscribeId });
-
-
-            //NO: nothing when deleting!!! (but only that is possible)
+            //NO: not cascade deleting!!! (but only that is possible)
             modelBuilder.Entity<SubscriberSubscription>()
                 .HasOne(p => p.WhoSubscribe)
                 .WithMany(p => p.Subscriptions)
@@ -60,6 +59,27 @@ namespace BelTwit_REST_API.Models
                 .WithMany(p => p.Tweets)
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+
+
+
+
+
+            modelBuilder.Entity<Reaction>()
+                .HasKey(p => new { p.UserId, p.TweetId });
+
+            //NO: not cascade deleting!!! (but only that is possible)
+            modelBuilder.Entity<Reaction>()
+                .HasOne(p => p.User)
+                .WithMany(p => p.TweetReactions)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Reaction>()
+                .HasOne(p => p.Tweet)
+                .WithMany(p => p.TweetReactions)
+                .HasForeignKey(p => p.TweetId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
