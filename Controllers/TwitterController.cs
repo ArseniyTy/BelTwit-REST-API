@@ -171,7 +171,7 @@ namespace BelTwit_REST_API.Controllers
 
             var commentList = tweet.Comments;
             commentList.Add(comment);
-            tweet.Comments = commentList; //для обновленія бд
+            //tweet.Comments = commentList; //для обновленія бд
 
 
             _db.Tweets.Update(tweet);
@@ -220,6 +220,30 @@ namespace BelTwit_REST_API.Controllers
                 .FirstOrDefault(p => p.Id == tweetId);
             if (tweet == null)
                 return NotFound("User doesn't have tweet with such Id");
+
+
+            _db.Entry(tweet).Collection(p => p.TweetReactions).Load();
+            var reactionFromDb = tweet.TweetReactions
+                .FirstOrDefault(p => p.UserId == user.Id);
+            if (reactionFromDb != null)
+            {
+                if(reactionFromDb.IsLike==true)
+                    return BadRequest("You have already liked this tweet");
+                reactionFromDb.IsLike = true;
+            }
+            else
+            {
+                var reaction = new Reaction
+                {
+                    IsLike = true,
+
+                    IsDislike = false,
+                    IsRetweeted = false,
+                    TweetId = tweet.Id,
+                    UserId = user.Id
+                };
+                _db.Reactions.Add(reaction);
+            }
 
             tweet.Likes += 1;
             _db.Tweets.Update(tweet);
