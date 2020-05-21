@@ -11,7 +11,7 @@ namespace BelTwit_REST_API.Models
         public DbSet<Log> Logs { get; set; }
         public DbSet<Tweet> Tweets { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<UserLikeState> UserLikeStates { get; set; }
+        public DbSet<UserRateState> UserRateStates { get; set; }
 
         public BelTwitContext(DbContextOptions<BelTwitContext> options)
             : base (options)
@@ -76,12 +76,12 @@ namespace BelTwit_REST_API.Models
                 .OnDelete(DeleteBehavior.Cascade);
 
 
-            modelBuilder.Entity<UserLikeState>()
+            modelBuilder.Entity<UserRateState>()
                 .HasKey(p => new { p.UserId, p.TweetId });
 
-            modelBuilder.Entity<UserLikeState>()
+            modelBuilder.Entity<UserRateState>()
                 .HasOne(p => p.Tweet)
-                .WithMany(p => p.TweetLikeStates)
+                .WithMany(p => p.TweetRateStates)
                 .HasForeignKey(p => p.TweetId)
                 .OnDelete(DeleteBehavior.Cascade);
         }

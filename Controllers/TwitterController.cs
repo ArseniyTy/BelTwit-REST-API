@@ -189,13 +189,13 @@ namespace BelTwit_REST_API.Controllers
         //нужно же много коментов чтобы, а не одін. Получается нужно отдельная связь tweet with comments
         // но лучше тогда связать только твіты, а от юзеров оставіть только userId, і будет one-to-many
         //Аналогічно сделать для лайков і дізлайков - отдельная таблічка с лайк-стэйт (0/-1/1)
-        //[HttpPut("like-tweet")]
-        //public ActionResult WriteCommentToTweet([FromBody]JwtWtihObject<Guid> jwtWithTweetId)
+        //[HttpPut("rate-tweet")]
+        //public ActionResult RateTweet([FromBody]JwtWtihObject<Tuple<Guid,RateState>> jwtWithInfo)
         //{
         //    JWT token;
         //    try
         //    {
-        //        token = new JWT(jwtWithTweetId.JWT);
+        //        token = new JWT(jwtWithInfo.JWT);
         //    }
         //    catch (Exception ex) //token expired
         //    {
@@ -212,7 +212,7 @@ namespace BelTwit_REST_API.Controllers
         //    Guid tweetId;
         //    try
         //    {
-        //        tweetId = jwtWithTweetId.Object;
+        //        tweetId = jwtWithInfo.Object.Item1;
         //    }
         //    catch (Exception ex)
         //    {
@@ -224,12 +224,17 @@ namespace BelTwit_REST_API.Controllers
         //        return NotFound("User doesn't have tweet with such Id");
 
 
-        //    _db.Entry(tweet).Collection(p => p.TweetReactions).Load();
-        //    var reactionFromDb = tweet.TweetReactions
+        //    int stateJSON = (int)jwtWithInfo.Object.Item2;
+        //    if (stateJSON != -1 && stateJSON != 0 && stateJSON != 1)
+        //        return BadRequest("There is no such rate state");
+
+
+        //    _db.Entry(tweet).Collection(p => p.TweetLikeStates).Load();
+        //    var stateFromDb = tweet.TweetLikeStates
         //        .FirstOrDefault(p => p.UserId == user.Id);
-        //    if (reactionFromDb != null)
+        //    if (stateFromDb != null)
         //    {
-        //        if(reactionFromDb.IsLike==true)
+        //        if ((int)stateFromDb.RateState == stateJSON)
         //            return BadRequest("You have already liked this tweet");
         //        reactionFromDb.IsLike = true;
         //    }

@@ -42,13 +42,13 @@ namespace BelTwit_REST_API.Models
 
 
         public virtual IList<Comment> TweetComments { get; set; }   //твіты
-        public virtual IList<UserLikeState> TweetLikeStates { get; set; }   
+        public virtual IList<UserRateState> TweetRateStates { get; set; }   
 
 
         public Tweet() 
         {
             TweetComments = new List<Comment>();
-            TweetLikeStates = new List<UserLikeState>();
+            TweetRateStates = new List<UserRateState>();
         }
         public Tweet(Tweet tweetToCopy) : base()
         {

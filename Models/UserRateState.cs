@@ -5,15 +5,15 @@ using System.Threading.Tasks;
 
 namespace BelTwit_REST_API.Models
 {
-    public enum LikeState
+    public enum RateState
     {
         Dislike=-1,
         None,
         Like        
     }
-    public class UserLikeState
+    public class UserRateState
     {
-        public LikeState LikeState { get; set; }
+        public RateState RateState { get; set; }
         public Guid UserId { get; set; }
 
 

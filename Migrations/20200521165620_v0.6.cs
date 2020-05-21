@@ -7,21 +7,18 @@ namespace BelTwit_REST_API.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "CommentsDb",
-                table: "Tweets");
-
             migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
+                    Id = table.Column<Guid>(nullable: false),
+                    Content = table.Column<string>(nullable: true),
                     UserId = table.Column<Guid>(nullable: false),
-                    TweetId = table.Column<Guid>(nullable: false),
-                    Content = table.Column<string>(nullable: true)
+                    TweetId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Comments", x => new { x.UserId, x.TweetId });
+                    table.PrimaryKey("PK_Comments", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Comments_Tweets_TweetId",
                         column: x => x.TweetId,
@@ -31,18 +28,18 @@ namespace BelTwit_REST_API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserLikeStates",
+                name: "UserRateStates",
                 columns: table => new
                 {
                     UserId = table.Column<Guid>(nullable: false),
                     TweetId = table.Column<Guid>(nullable: false),
-                    LikeState = table.Column<int>(nullable: false)
+                    RateState = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserLikeStates", x => new { x.UserId, x.TweetId });
+                    table.PrimaryKey("PK_UserRateStates", x => new { x.UserId, x.TweetId });
                     table.ForeignKey(
-                        name: "FK_UserLikeStates_Tweets_TweetId",
+                        name: "FK_UserRateStates_Tweets_TweetId",
                         column: x => x.TweetId,
                         principalTable: "Tweets",
                         principalColumn: "Id",
@@ -55,8 +52,8 @@ namespace BelTwit_REST_API.Migrations
                 column: "TweetId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserLikeStates_TweetId",
-                table: "UserLikeStates",
+                name: "IX_UserRateStates_TweetId",
+                table: "UserRateStates",
                 column: "TweetId");
         }
 
@@ -66,7 +63,7 @@ namespace BelTwit_REST_API.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "UserLikeStates");
+                name: "UserRateStates");
 
             migrationBuilder.AddColumn<string>(
                 name: "CommentsDb",
