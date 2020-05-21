@@ -13,14 +13,8 @@ using Microsoft.EntityFrameworkCore;
 
 /*TwitterController:
  * 
- * Comment model (User(+connection),Content,Likes,Dislikes)
+ * DELETE comment (PUT ne nado)
  * 
- * POST(Id tweet-a) - write comment
- * POST(Id) - put like tweet
- * POST(Id) - put dislike tweet
- * 
- * 
- * * 
  *\kak lenta novostey/
  * GET - get all tweets of your subscriptions sorted by data  + доп параметр, сколько первых выбрать
  * 
@@ -126,6 +120,48 @@ namespace BelTwit_REST_API.Controllers
             return Ok(tweet);
         }
 
+        [HttpDelete]
+        public ActionResult DeleteTweet([FromBody]JwtWtihObject<string> jwtWithTweet)
+        {
+            JWT token;
+            try
+            {
+                token = new JWT(jwtWithTweet.JWT);
+            }
+            catch (Exception ex) //token expired
+            {
+                return BadRequest(ex.Message);
+            }
+            var user = _db.Users
+                .Include(p => p.Tweets)
+                .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (user == null)
+                return NotFound("Your jwt doesn't match any user!");
+
+
+
+
+            Guid tweetId;
+            try
+            {
+                tweetId = new Guid(jwtWithTweet.Object);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
+            var tweet = user.Tweets
+                .FirstOrDefault(p => p.Id == tweetId);
+            if (tweet == null)
+                return NotFound("You haven't tweet with such Id");
+
+            _db.Tweets.Remove(tweet);
+            _db.SaveChanges();
+
+            return Ok(tweet);
+        }
 
 
 
@@ -186,7 +222,7 @@ namespace BelTwit_REST_API.Controllers
 
 
         [HttpPut("rate-tweet")]
-        public ActionResult RateTweet([FromBody]JwtWtihObject<Tuple<Guid, RateState>> jwtWithInfo)
+        public ActionResult RateTweet([FromBody]JwtWtihObject<TweetIdWithRateJSON> jwtWithInfo)
         {
             JWT token;
             try
@@ -208,7 +244,7 @@ namespace BelTwit_REST_API.Controllers
             Guid tweetId;
             try
             {
-                tweetId = jwtWithInfo.Object.Item1;
+                tweetId = jwtWithInfo.Object.TweetId;
             }
             catch (Exception ex)
             {
@@ -220,7 +256,7 @@ namespace BelTwit_REST_API.Controllers
                 return NotFound("User doesn't have tweet with such Id");
 
 
-            int stateFromJSON = (int)jwtWithInfo.Object.Item2;
+            int stateFromJSON = (int)jwtWithInfo.Object.RateState;
             if (stateFromJSON != -1 && stateFromJSON != 0 && stateFromJSON != 1)
                 return BadRequest("There is no such rate state");
 
@@ -253,7 +289,6 @@ namespace BelTwit_REST_API.Controllers
                     UserId = user.Id
                 };
                 _db.UserRateStates.Add(newState);
-                tweet.Likes += stateFromJSON; //еслі дізлайк то +=1
             }
 
             if ((RateState)stateFromJSON == RateState.Dislike)
@@ -269,47 +304,6 @@ namespace BelTwit_REST_API.Controllers
 
 
 
-        [HttpDelete]
-        public ActionResult DeleteTweet([FromBody]JwtWtihObject<string> jwtWithTweet)
-        {
-            JWT token;
-            try
-            {
-                token = new JWT(jwtWithTweet.JWT);
-            }
-            catch (Exception ex) //token expired
-            {
-                return BadRequest(ex.Message);
-            }
-            var user = _db.Users
-                .Include(p => p.Tweets)
-                .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
-            if (user == null)
-                return NotFound("Your jwt doesn't match any user!");
-
-
-
-
-            Guid tweetId;
-            try
-            {
-                tweetId = new Guid(jwtWithTweet.Object);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-
-
-            var tweet = user.Tweets
-                .FirstOrDefault(p => p.Id == tweetId);
-            if (tweet == null)
-                return NotFound("You haven't tweet with such Id");
-
-            _db.Tweets.Remove(tweet);
-            _db.SaveChanges();
-
-            return Ok(tweet);
-        }
+        
     }
 }

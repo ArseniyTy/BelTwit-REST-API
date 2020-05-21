@@ -26,6 +26,8 @@
 | GET    | api/twitter/getByLogin/{login}|| Get all tweets of user with "login".
 | POST   | api/twitter                   |[JwtWithTweet model](#jwtwithtweet-json-model)| Creates a user tweet. JWT and Tweet (Content at least) required.
 | DELETE | api/twitter   				 |[JwtWithTweetId model](#jwtwithtweetid-json-model)| Deletes a user tweet. JWT and TweetId required.
+| POST   | api/twitter/comment-tweet	 |[CommentAdding model](#commentadding-json-model)| Comments selected tweet(by TweetId). JWT required.
+| PUT    | api/twitter/rate-tweet		 |[RatingAdding model](#ratingadding-json-model)| Rates selected tweet(by TweetId). There are 3 possible rates `"Dislike"`,`"None"`,`"Like"`. JWT required.
 
 
 
@@ -79,5 +81,27 @@
 {
   "JWT": "yourJWTValue",
   "Object": "yourTweetId"
+}
+```
+
+#### CommentAdding JSON model:
+```json
+{
+	"JWT": "yourJWTValue",
+	"Object": {
+		"TweetId":"yourTweetId",
+		"Comment": "Your comment"
+	}
+}
+```
+
+#### RatingAdding JSON model:
+```json
+{
+	"JWT": "yourJWTValue",
+	"Object": {
+		"TweetId":"yourTweetId",
+		"RateState": "Your rateState: Dislike/None/Like"
+	}
 }
 ```
