@@ -27,21 +27,18 @@ namespace BelTwit_REST_API.Models
         public string PasswordSalt { get; set; }
 
 
+        public virtual IList<RefreshToken> RefreshTokens { get; set; }
         public virtual IList<SubscriberSubscription> Subscribers { get; set; }    //подпісчікі
         public virtual IList<SubscriberSubscription> Subscriptions { get; set; }  //подпіскі
         public virtual IList<Tweet> Tweets { get; set; }  //твіты
-        public virtual IList<Reaction> TweetReactions { get; set; }  //твіты
 
 
-
-        public IList<RefreshToken> RefreshTokens { get; set; }
         public User()
         {
             RefreshTokens = new List<RefreshToken>();
             Subscribers= new List<SubscriberSubscription>();
             Subscriptions = new List<SubscriberSubscription>();
             Tweets = new List<Tweet>();
-            TweetReactions = new List<Reaction>();
         }
     }
 }

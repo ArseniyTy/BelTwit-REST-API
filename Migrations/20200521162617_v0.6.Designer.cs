@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BelTwit_REST_API.Migrations
 {
     [DbContext(typeof(BelTwitContext))]
-    [Migration("20200520190514_v0.6")]
+    [Migration("20200521162617_v0.6")]
     partial class v06
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,24 @@ namespace BelTwit_REST_API.Migrations
                 .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("BelTwit_REST_API.Models.Comment", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TweetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "TweetId");
+
+                    b.HasIndex("TweetId");
+
+                    b.ToTable("Comments");
+                });
 
             modelBuilder.Entity("BelTwit_REST_API.Models.Log", b =>
                 {
@@ -39,33 +57,6 @@ namespace BelTwit_REST_API.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Logs");
-                });
-
-            modelBuilder.Entity("BelTwit_REST_API.Models.Reaction", b =>
-                {
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TweetId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDislike")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsLike")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRetweeted")
-                        .HasColumnType("bit");
-
-                    b.HasKey("UserId", "TweetId");
-
-                    b.HasIndex("TweetId");
-
-                    b.ToTable("Reactions");
                 });
 
             modelBuilder.Entity("BelTwit_REST_API.Models.RefreshToken", b =>
@@ -107,9 +98,6 @@ namespace BelTwit_REST_API.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CommentsDb")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Content")
                         .HasColumnType("nvarchar(max)");
@@ -160,18 +148,30 @@ namespace BelTwit_REST_API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("BelTwit_REST_API.Models.Reaction", b =>
+            modelBuilder.Entity("BelTwit_REST_API.Models.UserLikeState", b =>
+                {
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TweetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("LikeState")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "TweetId");
+
+                    b.HasIndex("TweetId");
+
+                    b.ToTable("UserLikeStates");
+                });
+
+            modelBuilder.Entity("BelTwit_REST_API.Models.Comment", b =>
                 {
                     b.HasOne("BelTwit_REST_API.Models.Tweet", "Tweet")
-                        .WithMany("TweetReactions")
+                        .WithMany("TweetComments")
                         .HasForeignKey("TweetId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("BelTwit_REST_API.Models.User", "User")
-                        .WithMany("TweetReactions")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -204,6 +204,15 @@ namespace BelTwit_REST_API.Migrations
                     b.HasOne("BelTwit_REST_API.Models.User", "User")
                         .WithMany("Tweets")
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("BelTwit_REST_API.Models.UserLikeState", b =>
+                {
+                    b.HasOne("BelTwit_REST_API.Models.Tweet", "Tweet")
+                        .WithMany("TweetLikeStates")
+                        .HasForeignKey("TweetId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

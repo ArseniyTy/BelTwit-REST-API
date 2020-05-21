@@ -36,31 +36,19 @@ namespace BelTwit_REST_API.Models
         //}
 
 
-
-        [NotMapped]
-        public List<string> Comments
-        {
-            get
-            {
-                return TweetReactions
-                    .Where(p=>p.Comment!=null)
-                    .Select(p => p.Comment)
-                    .ToList();
-            }
-        }
-
-
         public Guid UserIdRetweetedFrom { get; set; }
         public Guid UserId { get; set; }
         public User User { get; set; }
 
 
-        public virtual IList<Reaction> TweetReactions { get; set; }  //твіты
+        public virtual IList<Comment> TweetComments { get; set; }   //твіты
+        public virtual IList<UserLikeState> TweetLikeStates { get; set; }   
 
 
         public Tweet() 
         {
-            TweetReactions = new List<Reaction>();
+            TweetComments = new List<Comment>();
+            TweetLikeStates = new List<UserLikeState>();
         }
         public Tweet(Tweet tweetToCopy) : base()
         {

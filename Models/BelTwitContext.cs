@@ -10,7 +10,8 @@ namespace BelTwit_REST_API.Models
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<Log> Logs { get; set; }
         public DbSet<Tweet> Tweets { get; set; }
-        public DbSet<Reaction> Reactions { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<UserLikeState> UserLikeStates { get; set; }
 
         public BelTwitContext(DbContextOptions<BelTwitContext> options)
             : base (options)
@@ -65,21 +66,24 @@ namespace BelTwit_REST_API.Models
 
 
 
-            modelBuilder.Entity<Reaction>()
+            modelBuilder.Entity<Comment>()
                 .HasKey(p => new { p.UserId, p.TweetId });
 
-            //NO: not cascade deleting!!! (but only that is possible)
-            modelBuilder.Entity<Reaction>()
-                .HasOne(p => p.User)
-                .WithMany(p => p.TweetReactions)
-                .HasForeignKey(p => p.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Reaction>()
+            modelBuilder.Entity<Comment>()
                 .HasOne(p => p.Tweet)
-                .WithMany(p => p.TweetReactions)
+                .WithMany(p => p.TweetComments)
                 .HasForeignKey(p => p.TweetId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<UserLikeState>()
+                .HasKey(p => new { p.UserId, p.TweetId });
+
+            modelBuilder.Entity<UserLikeState>()
+                .HasOne(p => p.Tweet)
+                .WithMany(p => p.TweetLikeStates)
+                .HasForeignKey(p => p.TweetId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

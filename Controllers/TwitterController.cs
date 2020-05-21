@@ -60,6 +60,7 @@ namespace BelTwit_REST_API.Controllers
             }
 
             var tweet = _db.Tweets
+                .Include(p => p.TweetComments)
                 .FirstOrDefault(p => p.Id == idGuid);
             if (tweet == null)
                 return BadRequest("Such tweet doen't exist");
@@ -74,12 +75,11 @@ namespace BelTwit_REST_API.Controllers
             if (user == null)
                 return BadRequest("There is no such a user");
 
-            //_db.Entry(user).Collection(p => p.Tweets).Load();
-            var tweets = _db.Users
-                .Include(p => p.Tweets)
-                .Where(p => p.Id == user.Id)
-                .Select(p => p.Tweets)
+            var tweets = _db.Tweets
+                .Include(p => p.TweetComments)
+                .Where(p => p.UserId == user.Id)
                 .ToList();
+
             return Ok(tweets);
         }
 
@@ -165,92 +165,93 @@ namespace BelTwit_REST_API.Controllers
             if (tweet == null)
                 return NotFound("User doesn't have tweet with such Id");
 
-            var comment = jwtWithComment.Object.Comment;
-            if (comment == null || comment.Length==0)
+            var commentCont = jwtWithComment.Object.Comment;
+            if (commentCont == null || commentCont.Length==0)
                 return BadRequest("Comment must include at least one symbol");
 
-            var commentList = tweet.Comments;
-            commentList.Add(comment);
-            //tweet.Comments = commentList; //для обновленія бд
-
-
-            _db.Tweets.Update(tweet);
+            var comment = new Comment
+            {
+                Content = commentCont,
+                TweetId = tweet.Id,
+                UserId = user.Id
+            };
+            _db.Comments.Add(comment);
             _db.SaveChanges();
 
-            return Ok(tweet);
+            return Ok();
         }
 
 
-        //можно сколько хочешь лайкать от одного чувака + ещё надо, чтобы отменить лайк 
+        //можно сколько хочешь лайкать от одного чувака + ещё надо, чтобы отменить лайк і дізлайk 
         //+ чтобы нельзя лайк і дізлайк одновременно
 
-        //ПРАПАНОВА: стварыць прамежутачую табліцу UserReaction дзе апісваецца пастваіў лайк
-        //ці дізлайк + камент к твіту
-        //связь паміж User і Tweet праз яе - many-to-many
-        [HttpPut("like-tweet")]
-        public ActionResult WriteCommentToTweet([FromBody]JwtWtihObject<Guid> jwtWithTweetId)
-        {
-            JWT token;
-            try
-            {
-                token = new JWT(jwtWithTweetId.JWT);
-            }
-            catch (Exception ex) //token expired
-            {
-                return BadRequest(ex.Message);
-            }
-            var user = _db.Users
-                .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
-            if (user == null)
-                return NotFound("Your jwt doesn't match any user!");
+        //нужно же много коментов чтобы, а не одін. Получается нужно отдельная связь tweet with comments
+        // но лучше тогда связать только твіты, а от юзеров оставіть только userId, і будет one-to-many
+        //Аналогічно сделать для лайков і дізлайков - отдельная таблічка с лайк-стэйт (0/-1/1)
+        //[HttpPut("like-tweet")]
+        //public ActionResult WriteCommentToTweet([FromBody]JwtWtihObject<Guid> jwtWithTweetId)
+        //{
+        //    JWT token;
+        //    try
+        //    {
+        //        token = new JWT(jwtWithTweetId.JWT);
+        //    }
+        //    catch (Exception ex) //token expired
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //    var user = _db.Users
+        //        .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+        //    if (user == null)
+        //        return NotFound("Your jwt doesn't match any user!");
 
 
 
 
-            Guid tweetId;
-            try
-            {
-                tweetId = jwtWithTweetId.Object;
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            var tweet = _db.Tweets
-                .FirstOrDefault(p => p.Id == tweetId);
-            if (tweet == null)
-                return NotFound("User doesn't have tweet with such Id");
+        //    Guid tweetId;
+        //    try
+        //    {
+        //        tweetId = jwtWithTweetId.Object;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //    var tweet = _db.Tweets
+        //        .FirstOrDefault(p => p.Id == tweetId);
+        //    if (tweet == null)
+        //        return NotFound("User doesn't have tweet with such Id");
 
 
-            _db.Entry(tweet).Collection(p => p.TweetReactions).Load();
-            var reactionFromDb = tweet.TweetReactions
-                .FirstOrDefault(p => p.UserId == user.Id);
-            if (reactionFromDb != null)
-            {
-                if(reactionFromDb.IsLike==true)
-                    return BadRequest("You have already liked this tweet");
-                reactionFromDb.IsLike = true;
-            }
-            else
-            {
-                var reaction = new Reaction
-                {
-                    IsLike = true,
+        //    _db.Entry(tweet).Collection(p => p.TweetReactions).Load();
+        //    var reactionFromDb = tweet.TweetReactions
+        //        .FirstOrDefault(p => p.UserId == user.Id);
+        //    if (reactionFromDb != null)
+        //    {
+        //        if(reactionFromDb.IsLike==true)
+        //            return BadRequest("You have already liked this tweet");
+        //        reactionFromDb.IsLike = true;
+        //    }
+        //    else
+        //    {
+        //        var reaction = new Comment
+        //        {
+        //            IsLike = true,
 
-                    IsDislike = false,
-                    IsRetweeted = false,
-                    TweetId = tweet.Id,
-                    UserId = user.Id
-                };
-                _db.Reactions.Add(reaction);
-            }
+        //            IsDislike = false,
+        //            IsRetweeted = false,
+        //            TweetId = tweet.Id,
+        //            UserId = user.Id
+        //        };
+        //        _db.Reactions.Add(reaction);
+        //    }
 
-            tweet.Likes += 1;
-            _db.Tweets.Update(tweet);
-            _db.SaveChanges();
+        //    tweet.Likes += 1;
+        //    _db.Tweets.Update(tweet);
+        //    _db.SaveChanges();
 
-            return Ok(tweet);
-        }
+        //    return Ok();
+        //}
 
 
 
