@@ -67,7 +67,7 @@ namespace BelTwit_REST_API.Models
 
 
             modelBuilder.Entity<Comment>()
-                .HasKey(p => new { p.UserId, p.TweetId });
+                .HasKey(p => p.Id);
 
             modelBuilder.Entity<Comment>()
                 .HasOne(p => p.Tweet)

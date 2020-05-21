@@ -171,6 +171,7 @@ namespace BelTwit_REST_API.Controllers
 
             var comment = new Comment
             {
+                Id = new Guid(),
                 Content = commentCont,
                 TweetId = tweet.Id,
                 UserId = user.Id
@@ -178,7 +179,7 @@ namespace BelTwit_REST_API.Controllers
             _db.Comments.Add(comment);
             _db.SaveChanges();
 
-            return Ok();
+            return Ok(tweet);
         }
 
 
