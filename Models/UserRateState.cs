@@ -14,7 +14,9 @@ namespace BelTwit_REST_API.Models
     public class UserRateState
     {
         public RateState RateState { get; set; }
+
         public Guid UserId { get; set; }
+        public User User { get; set; }
 
 
         public Guid TweetId { get; set; }

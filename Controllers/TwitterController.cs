@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using BelTwit_REST_API.Tokens.JWT_token;
 using Microsoft.EntityFrameworkCore;
 
+//UPDATE_TOKENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 /*TwitterController:
  * 
@@ -183,81 +184,88 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
-        //можно сколько хочешь лайкать от одного чувака + ещё надо, чтобы отменить лайк і дізлайk 
-        //+ чтобы нельзя лайк і дізлайк одновременно
 
-        //нужно же много коментов чтобы, а не одін. Получается нужно отдельная связь tweet with comments
-        // но лучше тогда связать только твіты, а от юзеров оставіть только userId, і будет one-to-many
-        //Аналогічно сделать для лайков і дізлайков - отдельная таблічка с лайк-стэйт (0/-1/1)
-        //[HttpPut("rate-tweet")]
-        //public ActionResult RateTweet([FromBody]JwtWtihObject<Tuple<Guid,RateState>> jwtWithInfo)
-        //{
-        //    JWT token;
-        //    try
-        //    {
-        //        token = new JWT(jwtWithInfo.JWT);
-        //    }
-        //    catch (Exception ex) //token expired
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //    var user = _db.Users
-        //        .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
-        //    if (user == null)
-        //        return NotFound("Your jwt doesn't match any user!");
+        [HttpPut("rate-tweet")]
+        public ActionResult RateTweet([FromBody]JwtWtihObject<Tuple<Guid, RateState>> jwtWithInfo)
+        {
+            JWT token;
+            try
+            {
+                token = new JWT(jwtWithInfo.JWT);
+            }
+            catch (Exception ex) //token expired
+            {
+                return BadRequest(ex.Message);
+            }
+            var user = _db.Users
+                .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (user == null)
+                return NotFound("Your jwt doesn't match any user!");
 
 
 
 
-        //    Guid tweetId;
-        //    try
-        //    {
-        //        tweetId = jwtWithInfo.Object.Item1;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return BadRequest(ex.Message);
-        //    }
-        //    var tweet = _db.Tweets
-        //        .FirstOrDefault(p => p.Id == tweetId);
-        //    if (tweet == null)
-        //        return NotFound("User doesn't have tweet with such Id");
+            Guid tweetId;
+            try
+            {
+                tweetId = jwtWithInfo.Object.Item1;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            var tweet = _db.Tweets
+                .FirstOrDefault(p => p.Id == tweetId);
+            if (tweet == null)
+                return NotFound("User doesn't have tweet with such Id");
 
 
-        //    int stateJSON = (int)jwtWithInfo.Object.Item2;
-        //    if (stateJSON != -1 && stateJSON != 0 && stateJSON != 1)
-        //        return BadRequest("There is no such rate state");
+            int stateFromJSON = (int)jwtWithInfo.Object.Item2;
+            if (stateFromJSON != -1 && stateFromJSON != 0 && stateFromJSON != 1)
+                return BadRequest("There is no such rate state");
 
 
-        //    _db.Entry(tweet).Collection(p => p.TweetLikeStates).Load();
-        //    var stateFromDb = tweet.TweetLikeStates
-        //        .FirstOrDefault(p => p.UserId == user.Id);
-        //    if (stateFromDb != null)
-        //    {
-        //        if ((int)stateFromDb.RateState == stateJSON)
-        //            return BadRequest("You have already liked this tweet");
-        //        reactionFromDb.IsLike = true;
-        //    }
-        //    else
-        //    {
-        //        var reaction = new Comment
-        //        {
-        //            IsLike = true,
+            _db.Entry(tweet).Collection(p => p.TweetRateStates).Load();
+            var stateFromDb = tweet.TweetRateStates
+                .FirstOrDefault(p => p.UserId == user.Id);
+            if (stateFromDb != null)
+            {
+                if ((int)stateFromDb.RateState == stateFromJSON)
+                    return BadRequest("You have already rated this tweet the same way");
 
-        //            IsDislike = false,
-        //            IsRetweeted = false,
-        //            TweetId = tweet.Id,
-        //            UserId = user.Id
-        //        };
-        //        _db.Reactions.Add(reaction);
-        //    }
 
-        //    tweet.Likes += 1;
-        //    _db.Tweets.Update(tweet);
-        //    _db.SaveChanges();
 
-        //    return Ok();
-        //}
+                if (stateFromDb.RateState == RateState.Dislike)
+                    tweet.Dislikes--;
+                else if (stateFromDb.RateState == RateState.Like)
+                    tweet.Likes--;
+
+                
+
+                stateFromDb.RateState = (RateState)stateFromJSON;
+            }
+            else
+            {
+                var newState = new UserRateState
+                {
+                    RateState = (RateState)stateFromJSON,
+                    TweetId = tweet.Id,
+                    UserId = user.Id
+                };
+                _db.UserRateStates.Add(newState);
+                tweet.Likes += stateFromJSON; //еслі дізлайк то +=1
+            }
+
+            if ((RateState)stateFromJSON == RateState.Dislike)
+                tweet.Dislikes++;
+            else if ((RateState)stateFromJSON == RateState.Like)
+                tweet.Likes++;
+
+            _db.Tweets.Update(tweet);
+            _db.SaveChanges();
+
+            return Ok();
+        }
 
 
 

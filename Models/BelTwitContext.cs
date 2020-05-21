@@ -68,22 +68,31 @@ namespace BelTwit_REST_API.Models
 
             modelBuilder.Entity<Comment>()
                 .HasKey(p => p.Id);
-
             modelBuilder.Entity<Comment>()
                 .HasOne(p => p.Tweet)
                 .WithMany(p => p.TweetComments)
                 .HasForeignKey(p => p.TweetId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Comment>()
+                .HasOne(p => p.User)
+                .WithMany(p => p.TweetComments)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
+            
             modelBuilder.Entity<UserRateState>()
                 .HasKey(p => new { p.UserId, p.TweetId });
-
             modelBuilder.Entity<UserRateState>()
                 .HasOne(p => p.Tweet)
                 .WithMany(p => p.TweetRateStates)
                 .HasForeignKey(p => p.TweetId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<UserRateState>()
+                .HasOne(p => p.User)
+                .WithMany(p => p.TweetRateStates)
+                .HasForeignKey(p => p.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

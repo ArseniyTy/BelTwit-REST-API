@@ -31,6 +31,8 @@ namespace BelTwit_REST_API.Models
         public virtual IList<SubscriberSubscription> Subscribers { get; set; }    //подпісчікі
         public virtual IList<SubscriberSubscription> Subscriptions { get; set; }  //подпіскі
         public virtual IList<Tweet> Tweets { get; set; }  //твіты
+        public virtual IList<Comment> TweetComments { get; set; }
+        public virtual IList<UserRateState> TweetRateStates { get; set; }
 
 
         public User()
@@ -39,6 +41,8 @@ namespace BelTwit_REST_API.Models
             Subscribers= new List<SubscriberSubscription>();
             Subscriptions = new List<SubscriberSubscription>();
             Tweets = new List<Tweet>();
+            TweetComments = new List<Comment>();
+            TweetRateStates = new List<UserRateState>();
         }
     }
 }

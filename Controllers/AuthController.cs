@@ -291,6 +291,9 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                //if (ex.Message != "JWT Token expired")
+                //    token.UpdateTokens();
+
                 return BadRequest(ex.Message);
             }
 
