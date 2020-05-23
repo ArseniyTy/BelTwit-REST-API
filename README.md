@@ -24,6 +24,7 @@
 | :-------: | :-------------------------------------------- | :--------- | :-----------------------------------------------------------|
 | GET    | api/twitter/getById/{id}      || Get tweet by "id".
 | GET    | api/twitter/getByLogin/{login}|| Get all tweets of user with "login".
+| GET    | api/twitter  				 |`"YourJWTValue"`| Get your subscriptions(users on whom you've subscribed) tweets. JWT required.
 | POST   | api/twitter                   |[JwtWithTweet model](#jwtwithtweet-json-model)| Creates a user tweet. JWT and Tweet (Content at least) required.
 | DELETE | api/twitter   				 |[JwtWithTweetId model](#jwtwithtweetid-json-model)| Deletes a user tweet. JWT and TweetId required.
 | POST   | api/twitter/comment-tweet	 |[CommentAdding model](#commentadding-json-model)| Comments selected tweet(by TweetId). JWT required.
