@@ -286,14 +286,12 @@ namespace BelTwit_REST_API.Controllers
             AccessRefreshToken token;
             try
             {
-                token = new AccessRefreshToken(tokenJSON);
+                //ne proveryem srok godnosti
+                token = new AccessRefreshToken(tokenJSON, CheckForExpiration: false);
                 token.UpdateTokens();
             }
             catch (Exception ex)
             {
-                //if (ex.Message != "JWT Token expired")
-                //    token.UpdateTokens();
-
                 return BadRequest(ex.Message);
             }
 
