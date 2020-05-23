@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BelTwit_REST_API.Tokens.JWT_token;
 using BelTwit_REST_API.Additional;
 using BelTwit_REST_API.Models;
+using BelTwit_REST_API.ModelsJSON;
 
 namespace BelTwit_REST_API.Tokens
 {
@@ -15,10 +16,10 @@ namespace BelTwit_REST_API.Tokens
 
 
         //ссылается на ніжній
-        public AccessRefreshToken(AccessRefreshTokenJSON tokenJSON) : 
-            this(tokenJSON.AccessToken, tokenJSON.RefreshToken) { }
+        public AccessRefreshToken(AccessRefreshTokenJSON tokenJSON, bool CheckForExpiration = true) : 
+            this(tokenJSON.AccessToken, tokenJSON.RefreshToken, CheckForExpiration) { }
 
-        public AccessRefreshToken(string accessToken, string refreshToken)
+        public AccessRefreshToken(string accessToken, string refreshToken, bool CheckForExpiration = true)
         {            
             using(var _db = new BelTwitContext(Helper.BelTwitDbOptions))
             {
@@ -27,7 +28,7 @@ namespace BelTwit_REST_API.Tokens
                 if (RefreshToken == null)
                     throw new Exception("Refesh token doesn't exist in database");
 
-                AccessToken = new JWT(accessToken); //тут еслі что токен expired ошібка выскочіт
+                AccessToken = new JWT(accessToken, CheckForExpiration); //тут еслі что токен expired ошібка выскочіт
             }
             
         }
@@ -64,12 +65,6 @@ namespace BelTwit_REST_API.Tokens
                 AccessToken = AccessToken.GetBase64Encoding(),
                 RefreshToken = RefreshToken.TokenValue.ToString()
             };
-        }
-
-        public bool IsTokenExpired()
-        {
-            //Refresh token не может истечь раньше access, поэтому тут только одна проверка
-            return AccessToken.IsTokenExpired();
         }
 
         public void UpdateTokens()

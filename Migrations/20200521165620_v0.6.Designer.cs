@@ -4,14 +4,16 @@ using BelTwit_REST_API.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BelTwit_REST_API.Migrations
 {
     [DbContext(typeof(BelTwitContext))]
-    partial class BelTwitContextModelSnapshot : ModelSnapshot
+    [Migration("20200521165620_v0.6")]
+    partial class v06
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,8 +39,6 @@ namespace BelTwit_REST_API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("TweetId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Comments");
                 });
@@ -175,13 +175,7 @@ namespace BelTwit_REST_API.Migrations
                     b.HasOne("BelTwit_REST_API.Models.Tweet", "Tweet")
                         .WithMany("TweetComments")
                         .HasForeignKey("TweetId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("BelTwit_REST_API.Models.User", "User")
-                        .WithMany("TweetComments")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -223,13 +217,7 @@ namespace BelTwit_REST_API.Migrations
                     b.HasOne("BelTwit_REST_API.Models.Tweet", "Tweet")
                         .WithMany("TweetRateStates")
                         .HasForeignKey("TweetId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("BelTwit_REST_API.Models.User", "User")
-                        .WithMany("TweetRateStates")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 #pragma warning restore 612, 618

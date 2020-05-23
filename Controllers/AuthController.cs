@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using BelTwit_REST_API.Logging;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using BelTwit_REST_API.ModelsJSON;
 
 /*General:
  * Разделение на роли: у админа должна быть возможность редактировать все поля
@@ -105,7 +106,7 @@ namespace BelTwit_REST_API.Controllers
         }
 
         [HttpPost("subscribe")]
-        public ActionResult Subscribe([FromBody]UserSubscribeJSON subInfo)
+        public ActionResult Subscribe([FromBody]JwtWtihObject<string> subInfo)
         {
             JWT token;
             try
@@ -123,7 +124,7 @@ namespace BelTwit_REST_API.Controllers
                 return BadRequest("No user that matches this JWT");
 
             var userToSubscribe = _db.Users
-                .FirstOrDefault(p => p.Login == subInfo.OtherUserLogin);
+                .FirstOrDefault(p => p.Login == subInfo.WithJWTObject);
             if (userToSubscribe == null)
                 return BadRequest("No user that matches you entered login");
 
@@ -139,7 +140,7 @@ namespace BelTwit_REST_API.Controllers
         }
 
         [HttpDelete("unsubscribe")]
-        public ActionResult Unsubscribe([FromBody]UserSubscribeJSON subInfo)
+        public ActionResult Unsubscribe([FromBody]JwtWtihObject<string> subInfo)
         {
             JWT token;
             try
@@ -155,7 +156,7 @@ namespace BelTwit_REST_API.Controllers
             if (userWhoSubscribe == null)
                 return BadRequest("No user that matches this JWT");
 
-            var userToSubscribe = _db.Users.FirstOrDefault(p => p.Login == subInfo.OtherUserLogin);
+            var userToSubscribe = _db.Users.FirstOrDefault(p => p.Login == subInfo.WithJWTObject);
             if (userToSubscribe == null)
                 return BadRequest("No user in database that matches you entered login");
 
@@ -286,7 +287,8 @@ namespace BelTwit_REST_API.Controllers
             AccessRefreshToken token;
             try
             {
-                token = new AccessRefreshToken(tokenJSON);
+                //ne proveryem srok godnosti
+                token = new AccessRefreshToken(tokenJSON, CheckForExpiration: false);
                 token.UpdateTokens();
             }
             catch (Exception ex)

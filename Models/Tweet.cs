@@ -14,27 +14,26 @@ namespace BelTwit_REST_API.Models
         public int Dislikes { get; set; }
 
 
-        //storing in Database
-        private string _commentsDb { get; set; }
-        //not storing but easier to work with
-        [NotMapped]
-        public string[] Comments
-        {
-            get 
-            {
-                if (_commentsDb == null)
-                    return null;
-                return _commentsDb.Split(';');
-            }
-            set 
-            {
-                if (value == null)
-                    _commentsDb = null;
-                else
-                    _commentsDb = string.Join(";", value); 
-            }
-        }
-
+        ////storing in Database
+        //public string CommentsDb { get; set; }
+        ////not storing but easier to work with
+        //[NotMapped]
+        //public List<string> Comments
+        //{
+        //    get 
+        //    {
+        //        if (CommentsDb == null)
+        //            return new List<string>();
+        //        return CommentsDb.Split(';').ToList();
+        //    }
+        //    set 
+        //    {
+        //        if (value == null)
+        //            CommentsDb = null;
+        //        else
+        //            CommentsDb = string.Join(";", value); 
+        //    }
+        //}
 
 
         public Guid UserIdRetweetedFrom { get; set; }
@@ -42,8 +41,16 @@ namespace BelTwit_REST_API.Models
         public User User { get; set; }
 
 
-        public Tweet() { }
-        public Tweet(Tweet tweetToCopy)
+        public virtual IList<Comment> TweetComments { get; set; }   //твіты
+        public virtual IList<UserRateState> TweetRateStates { get; set; }   
+
+
+        public Tweet() 
+        {
+            TweetComments = new List<Comment>();
+            TweetRateStates = new List<UserRateState>();
+        }
+        public Tweet(Tweet tweetToCopy) : base()
         {
             if (tweetToCopy == null)
                 throw new Exception("Tweet to copy from is null!");
@@ -57,7 +64,7 @@ namespace BelTwit_REST_API.Models
             Content = tweetToCopy.Content;
             UserId = tweetToCopy.UserId;
 
-            Comments = tweetToCopy.Comments;
+            //Comments = tweetToCopy.Comments;
             Likes = tweetToCopy.Likes;
             Dislikes = tweetToCopy.Dislikes;
             UserIdRetweetedFrom = tweetToCopy.UserIdRetweetedFrom;

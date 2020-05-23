@@ -24,7 +24,12 @@
 | :-------: | :-------------------------------------------- | :--------- | :-----------------------------------------------------------|
 | GET    | api/twitter/getById/{id}      || Get tweet by "id".
 | GET    | api/twitter/getByLogin/{login}|| Get all tweets of user with "login".
+| GET    | api/twitter  				 |`"YourJWTValue"`| Get your subscriptions(users on whom you've subscribed) tweets. JWT required.
 | POST   | api/twitter                   |[JwtWithTweet model](#jwtwithtweet-json-model)| Creates a user tweet. JWT and Tweet (Content at least) required.
+| DELETE | api/twitter   				 |[JwtWithTweetId model](#jwtwithtweetid-json-model)| Deletes a user tweet. JWT and TweetId required.
+| POST   | api/twitter/comment-tweet	 |[CommentAdding model](#commentadding-json-model)| Comments selected tweet(by TweetId). JWT required.
+| DELETE | api/twitter/comment-tweet	 |[CommentDeleting model](#commentdeleting-json-model)| Delete comment by Id. JWT and TweetId required.
+| PUT    | api/twitter/rate-tweet		 |[RatingAdding model](#ratingadding-json-model)| Rates selected tweet(by TweetId). There are 3 possible rates `"Dislike"`,`"None"`,`"Like"`. JWT required.
 
 
 
@@ -61,15 +66,55 @@
 ```json
 {
 	"JWT": "yourJWTValue",
-	"OtherUserLogin": "UserLogin"
+	"WithJWTObject": "UserLogin"
 }
 ```
 #### JwtWithTweet JSON model:
 ```json
 {
   "JWT": "yourJWTValue",
-  "Object": {
+  "WithJWTObject": {
 	  "Content": "It is my tweet"
   }
+}
+```
+#### JwtWithTweetId JSON model:
+```json
+{
+  "JWT": "yourJWTValue",
+  "WithJWTObject": "yourTweetId"
+}
+```
+
+#### CommentAdding JSON model:
+```json
+{
+	"JWT": "yourJWTValue",
+	"WithJWTObject": {
+		"TweetId":"yourTweetId",
+		"WithTweetObject": "Your comment"
+	}
+}
+```
+
+#### CommentDeleting JSON model:
+```json
+{
+	"JWT": "yourJWTValue",
+	"WithJWTObject": {
+		"TweetId":"yourTweetId",
+		"WithTweetObject": "YourCommentId"
+	}
+}
+```
+
+#### RatingAdding JSON model:
+```json
+{
+	"JWT": "yourJWTValue",
+	"WithJWTObject": {
+		"TweetId":"yourTweetId",
+		"WithTweetObject": "Your rateState: Dislike/None/Like"
+	}
 }
 ```

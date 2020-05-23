@@ -22,7 +22,7 @@ namespace BelTwit_REST_API.Tokens.JWT_token
             SIGNATURE = new Signature(HEADER, PAYLOAD);
         }
 
-        public JWT(string encodedJWT)
+        public JWT(string encodedJWT, bool CheckForExpiration = true)
         {
             string[] props = encodedJWT.Split('.');
             try
@@ -34,9 +34,13 @@ namespace BelTwit_REST_API.Tokens.JWT_token
                 var SignatureCorrect = new Signature(HEADER, PAYLOAD);
                 if(SIGNATURE.Token!= SignatureCorrect.Token)
                     throw new Exception("Signatures do not match!!!");
-                if(IsTokenExpired())
-                    throw new Exception("JWT Token expired");
 
+
+                if(CheckForExpiration) //dly Update tokena nuzhno bez proverki
+                {
+                    if (IsTokenExpired())
+                        throw new Exception("JWT Token expired");
+                }
             }
             catch (Exception ex)
             {
