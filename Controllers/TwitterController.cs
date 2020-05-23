@@ -12,10 +12,8 @@ using BelTwit_REST_API.ModelsJSON;
 
 /*TwitterController:
  * 
- * DELETE comment (PUT ne nado)
- * 
  *\kak lenta novostey/
- * GET - get all tweets of your subscriptions sorted by data  + доп параметр, сколько первых выбрать
+ * GET - get all tweets of your subscriptions sorted by data(dobavit)  + доп параметр, сколько первых выбрать
  * 
  * 
  * 
@@ -76,6 +74,43 @@ namespace BelTwit_REST_API.Controllers
 
             return Ok(tweets);
         }
+
+
+        [HttpGet]
+        public ActionResult GetMySubscriptionsTweets([FromBody]string accessToken)
+        {
+            JWT token;
+            try
+            {
+                token = new JWT(accessToken);
+            }
+            catch (Exception ex) //token expired
+            {
+                return BadRequest(ex.Message);
+            }
+            var user = _db.Users
+                .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (user == null)
+                return NotFound("Your jwt doesn't match any user!");
+
+
+            _db.Entry(user).Collection(p => p.Subscriptions).Load();
+            var subscriptions = user.Subscriptions
+                .Where(p => _db.Users.FirstOrDefault(i => i.Id == p.OnWhomSubscribeId) != null)
+                .Select(p => _db.Users.FirstOrDefault(i => i.Id == p.OnWhomSubscribeId))
+                .ToList();
+
+            var alltweets = new List<Tweet>();
+            foreach (var sub in subscriptions)
+            {
+                _db.Entry(sub).Collection(p => p.Tweets).Load();
+                var subTweets = sub.Tweets;
+                alltweets.AddRange(subTweets);
+            }
+
+            return Ok(alltweets);
+        }
+
 
         [HttpPost]
         public ActionResult AddTweet([FromBody]JwtWtihObject<Tweet> jwtWithTweet)
@@ -350,9 +385,5 @@ namespace BelTwit_REST_API.Controllers
 
             return Ok();
         }
-
-
-
-        
     }
 }
