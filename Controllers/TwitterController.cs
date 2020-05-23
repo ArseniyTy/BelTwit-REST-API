@@ -8,8 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BelTwit_REST_API.Tokens.JWT_token;
 using Microsoft.EntityFrameworkCore;
-
-//UPDATE_TOKENS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+using BelTwit_REST_API.ModelsJSON;
 
 /*TwitterController:
  * 
@@ -99,7 +98,7 @@ namespace BelTwit_REST_API.Controllers
 
 
 
-            var tweetJSON = jwtWithTweet.Object;
+            var tweetJSON = jwtWithTweet.WithJWTObject;
             if (tweetJSON == null)
                 return BadRequest("No tweet object in request");
             tweetJSON.UserId = token.PAYLOAD.Sub;
@@ -144,7 +143,7 @@ namespace BelTwit_REST_API.Controllers
             Guid tweetId;
             try
             {
-                tweetId = new Guid(jwtWithTweet.Object);
+                tweetId = new Guid(jwtWithTweet.WithJWTObject);
             }
             catch (Exception ex)
             {
@@ -167,7 +166,7 @@ namespace BelTwit_REST_API.Controllers
 
 
         [HttpPost("comment-tweet")]
-        public ActionResult WriteCommentToTweet([FromBody]JwtWtihObject<TweetIdWithCommentJSON> jwtWithComment)
+        public ActionResult WriteCommentToTweet([FromBody]JwtWtihObject<TweetIdWithObject<string>> jwtWithComment)
         {
             //пока что выполняет функцію того, что только авторізованные пользователі могут коменты
             //писать, но в будущем нужна для прикрутки авторства коменту
@@ -191,7 +190,7 @@ namespace BelTwit_REST_API.Controllers
             Guid tweetId;
             try
             {
-                tweetId = jwtWithComment.Object.TweetId;
+                tweetId = jwtWithComment.WithJWTObject.TweetId;
             }
             catch (Exception ex)
             {
@@ -202,7 +201,7 @@ namespace BelTwit_REST_API.Controllers
             if (tweet == null)
                 return NotFound("User doesn't have tweet with such Id");
 
-            var commentCont = jwtWithComment.Object.Comment;
+            var commentCont = jwtWithComment.WithJWTObject.WithTweetObject;
             if (commentCont == null || commentCont.Length==0)
                 return BadRequest("Comment must include at least one symbol");
 
@@ -216,13 +215,63 @@ namespace BelTwit_REST_API.Controllers
             _db.Comments.Add(comment);
             _db.SaveChanges();
 
-            return Ok(tweet);
+            return Ok(comment);
+        }
+
+
+        [HttpDelete("comment-tweet")]
+        public ActionResult DeleteCommentToTweet([FromBody]JwtWtihObject<TweetIdWithObject<Guid>> jwtWithCommentId)
+        {
+            //пока что выполняет функцію того, что только авторізованные пользователі могут коменты
+            //писать, но в будущем нужна для прикрутки авторства коменту
+            JWT token;
+            try
+            {
+                token = new JWT(jwtWithCommentId.JWT);
+            }
+            catch (Exception ex) //token expired
+            {
+                return BadRequest(ex.Message);
+            }
+            var user = _db.Users
+                .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (user == null)
+                return NotFound("Your jwt doesn't match any user!");
+
+
+
+
+            Guid tweetId, commentId;
+            try
+            {
+                tweetId = jwtWithCommentId.WithJWTObject.TweetId;
+                commentId = jwtWithCommentId.WithJWTObject.WithTweetObject;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            var tweet = _db.Tweets
+                .FirstOrDefault(p => p.Id == tweetId);
+            if (tweet == null)
+                return NotFound("User doesn't have tweet with such Id");
+
+
+            _db.Entry(user).Collection(p => p.TweetComments).Load();
+            var comment = user.TweetComments
+                .FirstOrDefault(p => p.Id == commentId);
+            if (comment == null)
+                return NotFound("There is no comment with such Id");
+            _db.Comments.Remove(comment);
+            _db.SaveChanges();
+
+            return Ok(comment);
         }
 
 
 
         [HttpPut("rate-tweet")]
-        public ActionResult RateTweet([FromBody]JwtWtihObject<TweetIdWithRateJSON> jwtWithInfo)
+        public ActionResult RateTweet([FromBody]JwtWtihObject<TweetIdWithObject<RateState>> jwtWithInfo)
         {
             JWT token;
             try
@@ -244,7 +293,7 @@ namespace BelTwit_REST_API.Controllers
             Guid tweetId;
             try
             {
-                tweetId = jwtWithInfo.Object.TweetId;
+                tweetId = jwtWithInfo.WithJWTObject.TweetId;
             }
             catch (Exception ex)
             {
@@ -256,7 +305,7 @@ namespace BelTwit_REST_API.Controllers
                 return NotFound("User doesn't have tweet with such Id");
 
 
-            int stateFromJSON = (int)jwtWithInfo.Object.RateState;
+            int stateFromJSON = (int)jwtWithInfo.WithJWTObject.WithTweetObject;
             if (stateFromJSON != -1 && stateFromJSON != 0 && stateFromJSON != 1)
                 return BadRequest("There is no such rate state");
 

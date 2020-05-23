@@ -9,6 +9,7 @@ namespace BelTwit_REST_API.Models
     [DataContract]
     public class Comment
     {
+        [DataMember]
         public Guid Id { get; set; }
         [DataMember]
         public string Content { get; set; }
