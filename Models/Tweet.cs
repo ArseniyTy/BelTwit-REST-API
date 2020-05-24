@@ -14,34 +14,12 @@ namespace BelTwit_REST_API.Models
         public int Dislikes { get; set; }
 
 
-        ////storing in Database
-        //public string CommentsDb { get; set; }
-        ////not storing but easier to work with
-        //[NotMapped]
-        //public List<string> Comments
-        //{
-        //    get 
-        //    {
-        //        if (CommentsDb == null)
-        //            return new List<string>();
-        //        return CommentsDb.Split(';').ToList();
-        //    }
-        //    set 
-        //    {
-        //        if (value == null)
-        //            CommentsDb = null;
-        //        else
-        //            CommentsDb = string.Join(";", value); 
-        //    }
-        //}
-
-
         public Guid UserIdRetweetedFrom { get; set; }
         public Guid UserId { get; set; }
         public User User { get; set; }
 
 
-        public virtual IList<Comment> TweetComments { get; set; }   //твіты
+        public virtual IList<Comment> TweetComments { get; set; }   
         public virtual IList<UserRateState> TweetRateStates { get; set; }   
 
 
@@ -64,7 +42,6 @@ namespace BelTwit_REST_API.Models
             Content = tweetToCopy.Content;
             UserId = tweetToCopy.UserId;
 
-            //Comments = tweetToCopy.Comments;
             Likes = tweetToCopy.Likes;
             Dislikes = tweetToCopy.Dislikes;
             UserIdRetweetedFrom = tweetToCopy.UserIdRetweetedFrom;
