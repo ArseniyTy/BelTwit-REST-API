@@ -255,7 +255,7 @@ namespace BelTwit_REST_API.Controllers
 
 
         [HttpDelete("comment-tweet")]
-        public ActionResult DeleteCommentToTweet([FromBody]JwtWtihObject<TweetIdWithObject<Guid>> jwtWithCommentId)
+        public ActionResult DeleteCommentToTweet([FromBody]JwtWtihObject<Guid> jwtWithCommentId)
         {
             //пока что выполняет функцію того, что только авторізованные пользователі могут коменты
             //писать, но в будущем нужна для прикрутки авторства коменту
@@ -276,22 +276,15 @@ namespace BelTwit_REST_API.Controllers
 
 
 
-            Guid tweetId, commentId;
+            Guid commentId;
             try
             {
-                tweetId = jwtWithCommentId.WithJWTObject.TweetId;
-                commentId = jwtWithCommentId.WithJWTObject.WithTweetObject;
+                commentId = jwtWithCommentId.WithJWTObject;
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
-            var tweet = _db.Tweets
-                .FirstOrDefault(p => p.Id == tweetId);
-            if (tweet == null)
-                return NotFound("User doesn't have tweet with such Id");
-
-
             _db.Entry(user).Collection(p => p.TweetComments).Load();
             var comment = user.TweetComments
                 .FirstOrDefault(p => p.Id == commentId);
