@@ -10,12 +10,15 @@ using BelTwit_REST_API.Tokens.JWT_token;
 using Microsoft.EntityFrameworkCore;
 using BelTwit_REST_API.ModelsJSON;
 
-/*TwitterController:
- * 
- *\kak lenta novostey/
- * GET - get all tweets of your subscriptions sorted by DATE(dobavit)  + доп параметр, сколько первых выбрать
- * 
+/*TwitterController: 
  * Pri udalenii nuzno chistit promezhutochnoi tablici(v auth potom pozirit)
+ * 
+ * 1)Sdelat adminku (esli JWT raspoznaet teby kak admina, to ti mozezh delat necototie destviy bez lichnogo vladeniy)
+ *      + sdelat metod peredachi adminki (ee mozhet davat drugie admini)
+ *      + zabirat poka nelzy (hoty mozhno sdelat 3 rol - globalAdmin)
+ * 2)Logirovanie vsego (pered etim dropnut db). Esli admin, to ukazivar, chto LEHA(admin) dobavil ...
+ * 3)Dobavit kodi d readme i krasivo sostavit get, post, put, delete
+ * 4)Dobavit head + options metodi
  * 
 */
 
