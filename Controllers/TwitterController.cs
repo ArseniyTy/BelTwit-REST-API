@@ -13,11 +13,10 @@ using BelTwit_REST_API.ModelsJSON;
 /*TwitterController:
  * 
  *\kak lenta novostey/
- * GET - get all tweets of your subscriptions sorted by data(dobavit)  + доп параметр, сколько первых выбрать
+ * GET - get all tweets of your subscriptions sorted by DATE(dobavit)  + доп параметр, сколько первых выбрать
  * 
+ * Pri udalenii nuzno chistit promezhutochnoi tablici(v auth potom pozirit)
  * 
- * 
- * POST - retweet (с указаніем retweeted from)
 */
 
 
@@ -191,6 +190,13 @@ namespace BelTwit_REST_API.Controllers
             if (tweet == null)
                 return NotFound("You haven't tweet with such Id");
 
+
+
+            _db.Entry(tweet).Collection(p => p.TweetComments).Load();
+            _db.Entry(tweet).Collection(p => p.TweetRateStates).Load();         
+
+            _db.Comments.RemoveRange(tweet.TweetComments); //чістка вручную, т.к. в контексте DeleteBehaviour.Restrict (а по другому і нельзя)
+            _db.UserRateStates.RemoveRange(tweet.TweetRateStates);
             _db.Tweets.Remove(tweet);
             _db.SaveChanges();
 
