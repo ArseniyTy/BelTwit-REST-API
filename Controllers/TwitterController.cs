@@ -155,12 +155,12 @@ namespace BelTwit_REST_API.Controllers
         }
 
         [HttpDelete]
-        public ActionResult DeleteTweet([FromBody]JwtWtihObject<string> jwtWithTweet)
+        public ActionResult DeleteTweet([FromBody]JwtWtihObject<Guid> jwtWithTweetId)
         {
             JWT token;
             try
             {
-                token = new JWT(jwtWithTweet.JWT);
+                token = new JWT(jwtWithTweetId.JWT);
             }
             catch (Exception ex) //token expired
             {
@@ -178,7 +178,7 @@ namespace BelTwit_REST_API.Controllers
             Guid tweetId;
             try
             {
-                tweetId = new Guid(jwtWithTweet.WithJWTObject);
+                tweetId = jwtWithTweetId.WithJWTObject;
             }
             catch (Exception ex)
             {
@@ -197,6 +197,52 @@ namespace BelTwit_REST_API.Controllers
             return Ok(tweet);
         }
 
+
+        [HttpPost("retweet")]
+        public ActionResult Retweet([FromBody]JwtWtihObject<Guid> jwtWithTweetId)
+        {
+            JWT token;
+            try
+            {
+                token = new JWT(jwtWithTweetId.JWT);
+            }
+            catch (Exception ex) //token expired
+            {
+                return BadRequest(ex.Message);
+            }
+            var user = _db.Users
+                .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (user == null)
+                return NotFound("Your jwt doesn't match any user!");
+
+
+
+
+
+            Guid tweetId;
+            try
+            {
+                tweetId = jwtWithTweetId.WithJWTObject;
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
+
+            var tweet = _db.Tweets
+                .FirstOrDefault(p => p.Id == tweetId);
+            if (tweet == null)
+                return NotFound("There is no tweet with such Id");
+
+            var retweet = new Tweet(tweet);
+            retweet.UserIdRetweetedFrom = retweet.UserId;
+            retweet.UserId = user.Id;
+            _db.Tweets.Add(retweet);
+            _db.SaveChanges();
+
+            return Ok(retweet);
+        }
 
 
 
