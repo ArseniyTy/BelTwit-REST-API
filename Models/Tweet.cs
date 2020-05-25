@@ -14,7 +14,7 @@ namespace BelTwit_REST_API.Models
         public int Dislikes { get; set; }
 
 
-        public Guid UserIdRetweetedFrom { get; set; }
+        public Guid? UserIdRetweetedFrom { get; set; }
         public Guid UserId { get; set; }
         public User User { get; set; }
 

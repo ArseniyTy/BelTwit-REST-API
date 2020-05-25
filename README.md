@@ -30,6 +30,7 @@
 | POST   | api/twitter/comment-tweet	 |[CommentAdding model](#commentadding-json-model)| Comments selected tweet(by TweetId). JWT required.
 | DELETE | api/twitter/comment-tweet	 |[JwtWithCommentId model](#jwtwithid-json-model)| Delete comment by Id. JWT and TweetId required.
 | PUT    | api/twitter/rate-tweet		 |[RatingAdding model](#ratingadding-json-model)| Rates selected tweet(by TweetId). There are 3 possible rates `"Dislike"`,`"None"`,`"Like"`. JWT required.
+| POST   | api/twitter/retweet	 		 |[JwtWithTweetId model](#jwtwithid-json-model)| Retweet selected tweet to your user. JWT required.
 
 
 
