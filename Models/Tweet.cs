@@ -2,23 +2,31 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace BelTwit_REST_API.Models
 {
+    [DataContract]
     public class Tweet
     {
+        [DataMember]
         public Guid Id { get; set; }
+        [DataMember]
         public string Content { get; set; }
+        [DataMember]
         public int Likes { get; set; }
+        [DataMember]
         public int Dislikes { get; set; }
 
-
+        [DataMember]
         public Guid? UserIdRetweetedFrom { get; set; }
+        [DataMember]
         public Guid UserId { get; set; }
         public User User { get; set; }
 
 
+        [DataMember]
         public virtual IList<Comment> TweetComments { get; set; }   
         public virtual IList<UserRateState> TweetRateStates { get; set; }   
 

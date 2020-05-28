@@ -188,12 +188,21 @@ namespace BelTwit_REST_API.Controllers
             }
 
 
-            var tweet = user.Tweets
-                .FirstOrDefault(p => p.Id == tweetId);
-            if (tweet == null)
-                return NotFound("You haven't tweet with such Id");
-
-
+            Tweet tweet;
+            if(token.PAYLOAD.Admin)
+            {
+                tweet = _db.Tweets
+                    .FirstOrDefault(p => p.Id == tweetId);
+                if (tweet == null)
+                    return NotFound("There is no tweet with such Id");
+            }
+            else
+            {
+                tweet = user.Tweets
+                    .FirstOrDefault(p => p.Id == tweetId);
+                if (tweet == null)
+                    return NotFound("You haven't tweet with such Id");
+            }
 
             _db.Entry(tweet).Collection(p => p.TweetComments).Load();
             _db.Entry(tweet).Collection(p => p.TweetRateStates).Load();         

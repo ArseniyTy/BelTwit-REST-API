@@ -25,6 +25,7 @@ namespace BelTwit_REST_API.Models
         [DataMember]
         public string Password { get; set; }
         public string PasswordSalt { get; set; }
+        [DataMember]
         public bool IsAdmin { get; set; }
 
 
