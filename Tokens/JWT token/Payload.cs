@@ -10,13 +10,14 @@ namespace BelTwit_REST_API.Tokens.JWT_token
     {
         public Guid Sub { get; set; }   //user id
         public string Name { get; set; }    //user login
-        public DateTime Exp { get; set; }
-        //"admin": true
+        public bool Admin { get; set; }     //if the user is admin
+        public DateTime Exp { get; set; }   //expiration time
 
-        public Payload(Guid subject, string name)
+        public Payload(Guid subject, string name, bool admin)
         {
             Sub = subject;
             Name = name;
+            Admin = admin;
             Exp = DateTime.Now.AddMinutes(30); //AddSeconds(20) - for testing
         }
 
@@ -33,7 +34,8 @@ namespace BelTwit_REST_API.Tokens.JWT_token
             {
                 Sub = new Guid(props[0]);
                 Name = props[1];
-                Exp = DateTime.Parse(props[2].Replace('|', ':')); //заменяем |, которые мы установили в ToSting() для того, чтобы проісходіл нормальный Split здесь
+                Admin = bool.Parse(props[2]);
+                Exp = DateTime.Parse(props[3].Replace('|', ':')); //заменяем |, которые мы установили в ToSting() для того, чтобы проісходіл нормальный Split здесь
             }
             catch (Exception ex)
             {
@@ -43,7 +45,7 @@ namespace BelTwit_REST_API.Tokens.JWT_token
 
         public override string ToString()
         {
-            return String.Format("sub:{0},name:{1},exp:{2}", Sub, Name, Exp.ToString().Replace(':','|'));
+            return String.Format("sub:{0},name:{1},admin:{2},exp:{3}", Sub, Name, Admin, Exp.ToString().Replace(':','|'));
         }
 
         public string GetBase64Encoding()

@@ -18,7 +18,7 @@ namespace BelTwit_REST_API.Tokens.JWT_token
         public JWT(User user)
         {
             HEADER = new Header();
-            PAYLOAD = new Payload(user.Id, user.Login);
+            PAYLOAD = new Payload(user.Id, user.Login, user.IsAdmin);
             SIGNATURE = new Signature(HEADER, PAYLOAD);
         }
 
