@@ -43,7 +43,12 @@ namespace BelTwit_REST_API.Controllers
 
 
 
-
+        [HttpOptions("get-subscriptions")]
+        public ActionResult GetSubscriptionsOptions()
+        {
+            Response.Headers.Add("Allow", "GET, HEAD");
+            return Ok();
+        }
         [HttpHead("get-subscriptions")]
         public ActionResult GetSubscriptionsHead([FromBody]string accessToken)
         {
@@ -102,6 +107,12 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
+        [HttpOptions("get-subscribers")]
+        public ActionResult GetSubscribersOptions()
+        {
+            Response.Headers.Add("Allow", "GET, HEAD");
+            return Ok();
+        }
         [HttpHead("get-subscribers")]
         public ActionResult GetSubscribersHead([FromBody]string accessToken)
         {
@@ -159,6 +170,13 @@ namespace BelTwit_REST_API.Controllers
             return Ok(subscribers);
         }
 
+
+        [HttpOptions("get-subscribers")]
+        public ActionResult SubscribeOptions()
+        {
+            Response.Headers.Add("Allow", "POST, DELETE");
+            return Ok();
+        }
         [HttpPost("subscribe")]
         public ActionResult Subscribe([FromBody]JwtWtihObject<string> subInfo)
         {
@@ -197,7 +215,7 @@ namespace BelTwit_REST_API.Controllers
             return Ok(subSub);
         }
 
-        [HttpDelete("unsubscribe")]
+        [HttpDelete("subscribe")]
         public ActionResult Unsubscribe([FromBody]JwtWtihObject<string> subInfo)
         {
             JWT token;
@@ -245,7 +263,12 @@ namespace BelTwit_REST_API.Controllers
 
 
 
-
+        [HttpOptions]
+        public ActionResult AuthControllerOptions()
+        {
+            Response.Headers.Add("Allow", "GET, HEAD, POST, PUT, DELETE");
+            return Ok();
+        }
         [HttpHead]
         public ActionResult GetUsersHead()
         {
@@ -258,7 +281,7 @@ namespace BelTwit_REST_API.Controllers
             return Ok(users);
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         public ActionResult CreateUser([FromBody]User user)
         {
             var userFromDb = _db.Users.FirstOrDefault(u => u.Login == user.Login);
@@ -284,7 +307,7 @@ namespace BelTwit_REST_API.Controllers
             return Ok(user);
         }
 
-        [HttpPut("update")]
+        [HttpPut]
         public ActionResult UpdateUser([FromBody]Tuple<User, User> users)
         {
             var oldUser = users.Item1;
@@ -315,8 +338,7 @@ namespace BelTwit_REST_API.Controllers
             return Ok(userFromDb);
         }
 
-
-        [HttpDelete("delete")]
+        [HttpDelete]
         public ActionResult DeleteUser([FromBody]User user)
         {
             var userFromDb = _db.Users
@@ -359,6 +381,12 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
+        [HttpOptions("admin-delete")]
+        public ActionResult DeleteUserAdminOptions()
+        {
+            Response.Headers.Add("Allow", "DELETE");
+            return Ok();
+        }
         [HttpDelete("admin-delete")]
         public ActionResult DeleteUserAdmin([FromBody]JwtWtihObject<string> jwtWithUserLogin)
         {
@@ -424,7 +452,12 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
-
+        [HttpOptions("authentificate")]
+        public ActionResult AuthentificateUserOptions()
+        {
+            Response.Headers.Add("Allow", "POST");
+            return Ok();
+        }
         [HttpPost("authentificate")]
         public ActionResult AuthentificateUser([FromBody]User user)
         {
@@ -448,7 +481,12 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
-
+        [HttpOptions("authorize")]
+        public ActionResult AuthorizeUserOptions()
+        {
+            Response.Headers.Add("Allow", "GET, HEAD");
+            return Ok();
+        }
         [HttpHead("authorize")]
         public ActionResult AuthorizeUserHead([FromBody]string accessToken)
         {
@@ -482,8 +520,15 @@ namespace BelTwit_REST_API.Controllers
             return Ok(token);
             //return Ok(token.GetBase64Encoding());
         }
-        
 
+
+
+        [HttpOptions("update-tokens")]
+        public ActionResult RefreshTokensOptions()
+        {
+            Response.Headers.Add("Allow", "POST");
+            return Ok();
+        }
         //можно передавать любой старый access, і он будет обновляться
         //но это і не важно. Тут должна гарантіроваться лішь авторізованность
         //і в целом хакер не сможет получіть доступ к update-tokens

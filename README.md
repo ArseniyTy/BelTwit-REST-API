@@ -9,14 +9,14 @@
 | GET    | api/auth/get-subscribers  |`"YourJWTValue"`| Get your subscribers(who subscribed on you) by JWT value.|`200`, `400`, `404`
 | GET 	 | api/auth/get-subscriptions|`"YourJWTValue"`| Get your subscriptions(on whom you subscribed) by JWT value.|`200`, `400`, `404`
 | GET    | api/auth/authorize     	 |`"YourJWTValue"`| Authorize the user by JWT value as a string.|`200`, `400`
-| POST   | api/auth/create        	 |[User model](#user-json-model)| Create a single user. Login(unique, length: [2;20]) and password(length: [5;100]) are required.|`200`, `403`, `404`
+| POST   | api/auth        	 		 |[User model](#user-json-model)| Create a single user. Login(unique, length: [2;20]) and password(length: [5;100]) are required.|`200`, `403`, `404`
 | POST   | api/auth/authentificate	 |[User model](#user-json-model)| Authentificate the user by creating JWT(30 min) and RefreshToken(60 days).|`200`, `403`, `404`
 | POST   | api/auth/update-tokens	 |[AccessRefreshToken model](#accessrefreshtoken-json-model)  | Refresh your JWT[or AccessToken] (for 30 minutes) and your RefreshToken (for 60 days).|`200`, `400`
 | POST   | api/auth/subscribe     	 |[UserSubscribe model](#usersubscribe/unsubscribe-json-model)| Subscribes on the other user by your own JWT value and login of the other user.|`200`, `400`, `404`
-| PUT    | api/auth/update       	 |[2 users tuple](#2-users-json-tuple)| Update the user by changing property values. Item1 represents OldUser(old login and password are required), and Item2 representes NewUser(all changes are here).|`200`, `403`, `404`
-| DELETE | api/auth/delete        	 |[User model](#user-json-model)	  | Deletes the user(password and login are required).|`200`, `403`, `404`
+| PUT    | api/auth       	 		 |[2 users tuple](#2-users-json-tuple)| Update the user by changing property values. Item1 represents OldUser(old login and password are required), and Item2 representes NewUser(all changes are here).|`200`, `403`, `404`
+| DELETE | api/auth        	 		 |[User model](#user-json-model)	  | Deletes the user(password and login are required).|`200`, `403`, `404`
 | DELETE | api/auth/admin-delete  	 |[JwtWithUserId model](#jwtwithid-json-model)| Deletes the user by Id. Only for admnistrators!|`200`, `400`, `403`, `404`
-| DELETE | api/auth/unsubscribe   	 |[UserUnsubscribe model](#usersubscribe/unsubscribe-json-model)| Unsubscribes from the other user by your own JWT value and login of the other user.|`200`, `400`, `404`
+| DELETE | api/auth/subscribe   	 |[UserUnsubscribe model](#usersubscribe/unsubscribe-json-model)| Unsubscribes from the other user by your own JWT value and login of the other user.|`200`, `400`, `404`
 
 
 
