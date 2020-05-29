@@ -10,12 +10,6 @@ using BelTwit_REST_API.Tokens.JWT_token;
 using Microsoft.EntityFrameworkCore;
 using BelTwit_REST_API.ModelsJSON;
 
-/*TwitterController: 
- * 
- * 4)Dobavit head + options metodi
- * 
-*/
-
 
 namespace BelTwit_REST_API.Controllers
 {
@@ -33,7 +27,9 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
-
+        //https://codedestine.com/rest-options-restful-web-services/
+        //OPTIONS shows allowed request paths in Headers. So, user of API can get acquainted with
+        //the list of methods that is allowed.
         [HttpOptions("getById/{id}")]
         public ActionResult GetTweetByIdOptions()
         {
