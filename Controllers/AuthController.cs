@@ -40,7 +40,7 @@ namespace BelTwit_REST_API.Controllers
             _db = context;
             _logger = loggerFactory.CreateLogger("DatabaseLogger");
 
-           // _logger.LogInformation("LOGGER");
+           //_logger.LogInformation("First log");
         }
 
 
