@@ -12,8 +12,6 @@ using BelTwit_REST_API.ModelsJSON;
 
 /*TwitterController: 
  * 
- * 
- * 3)Dobavit kodi d readme i krasivo sostavit get, post, put, delete
  * 4)Dobavit head + options metodi
  * 
 */

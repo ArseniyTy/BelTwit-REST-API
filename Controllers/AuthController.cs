@@ -236,7 +236,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 string ex = "Password is incorrect";
                 _logger.LogError($"[PUT]api/auth/update" + ex);
-                return new ForbidResult(ex);
+                return Forbid(ex);
             }
 
 
@@ -268,7 +268,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 string ex = "Password is incorrect";
                 _logger.LogError($"[DELETE]api/auth/delete" + ex);
-                return new ForbidResult(ex);
+                return Forbid(ex);
             }
 
             #region РучнаяЧистка(т.к. в контексте DeleteBehaviour.Restrict, а по другому і нельзя)
@@ -317,7 +317,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 string ex = "This method is only for administrators";
                 _logger.LogError($"[DELETE]api/auth/admin-delete" + ex);
-                return new ForbidResult(ex);
+                return Forbid(ex);
             }
 
 
@@ -334,7 +334,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 string ex = "You can't delete this account with this method";
                 _logger.LogError($"[DELETE]api/auth/admin-delete" + ex);
-                return new ForbidResult(ex);
+                return Forbid(ex);
             }
 
             #region РучнаяЧистка(т.к. в контексте DeleteBehaviour.Restrict, а по другому і нельзя)
@@ -373,7 +373,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 string ex = "Password is incorrect";
                 _logger.LogError($"[POST]api/auth/authentificate" + ex);
-                return new ForbidResult(ex);
+                return Forbid(ex);
             }
 
 
