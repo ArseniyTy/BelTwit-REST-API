@@ -17,6 +17,7 @@ The API consistes of __3 controllers__:
 - [x] __Admin user role__ is available
 - [x] Sophisticated work with the __database__ (many-to-many, one-to-many realationships)
 - [x] __Self-referencing many-to-many__ connection (for subscribing system)
+- [x] __Logging__ of all actions (and writing down them to database)
 - [x] Beautiful and convenient __documentation__
 
 
