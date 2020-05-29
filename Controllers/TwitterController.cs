@@ -47,6 +47,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+               // _logger.LogError($"TwitterController: getById/{id}");
                 return BadRequest(ex.Message);
             }
 
@@ -150,6 +151,10 @@ namespace BelTwit_REST_API.Controllers
             _db.Tweets.Add(tweet);
             _db.SaveChanges();
 
+            ////////////////////////////////////////
+            string path = "api/twitter";
+            string message = $"User {user.Login} added tweet {tweet.Id}";
+            _logger.LogInformation($"{path};{message}");
             return Ok(tweet);
         }
 
