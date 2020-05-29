@@ -33,6 +33,15 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
+
+        [HttpOptions("getById/{id}")]
+        public ActionResult GetTweetByIdOptions()
+        {
+            Response.Headers.Add("Allow", "GET, HEAD");
+            return Ok();
+        }
+        //https://assertible.com/blog/7-http-methods-every-web-developer-should-know-and-how-to-test-them#options
+        //https://codedestine.com/rest-head-restful-web-services/
         //HEAD is the same as GET but does not has a respond body
         //Good practice, because we can check what code will be returned, before
         //GETting big data, or to check if the resource exist
@@ -58,7 +67,6 @@ namespace BelTwit_REST_API.Controllers
 
             return Ok();
         }
-
         [HttpGet("getById/{id}")]
         public ActionResult GetTweetById(string id)
         {
@@ -83,6 +91,12 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
+        [HttpOptions("getByLogin/{login}")]
+        public ActionResult GetTweetsByLoginOptions()
+        {
+            Response.Headers.Add("Allow", "GET, HEAD");
+            return Ok();
+        }
         [HttpHead("getByLogin/{login}")]
         public ActionResult GetTweetsByLoginHead(string login)
         {
@@ -114,7 +128,12 @@ namespace BelTwit_REST_API.Controllers
             return Ok(tweets);
         }
 
-
+        [HttpOptions]
+        public ActionResult TwitterControllerOptions()
+        {
+            Response.Headers.Add("Allow", "GET, HEAD, POST, DELETE");
+            return Ok();
+        }
         [HttpHead]
         public ActionResult GetMySubscriptionsTweetsHead([FromBody]string accessToken)
         {
@@ -185,6 +204,7 @@ namespace BelTwit_REST_API.Controllers
 
             return Ok(alltweets);
         }
+
 
 
         [HttpPost]
@@ -300,6 +320,12 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
+        [HttpOptions("retweet")]
+        public ActionResult RetweetOptions()
+        {
+            Response.Headers.Add("Allow", "GET");
+            return Ok();
+        }
         [HttpPost("retweet")]
         public ActionResult Retweet([FromBody]JwtWtihObject<Guid> jwtWithTweetId)
         {
@@ -352,7 +378,12 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
-
+        [HttpOptions("comment-tweet")]
+        public ActionResult CommentToTweetOptions()
+        {
+            Response.Headers.Add("Allow", "GET, DELETE");
+            return Ok();
+        }
         [HttpPost("comment-tweet")]
         public ActionResult WriteCommentToTweet([FromBody]JwtWtihObject<TweetIdWithObject<string>> jwtWithComment)
         {
@@ -475,6 +506,12 @@ namespace BelTwit_REST_API.Controllers
 
 
 
+        [HttpOptions("rate-tweet")]
+        public ActionResult RateTweetOptions()
+        {
+            Response.Headers.Add("Allow", "PUT");
+            return Ok();
+        }
         [HttpPut("rate-tweet")]
         public ActionResult RateTweet([FromBody]JwtWtihObject<TweetIdWithObject<RateState>> jwtWithInfo)
         {
