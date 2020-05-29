@@ -29,12 +29,17 @@ namespace BelTwit_REST_API.Logging
         public void Log<TState>(LogLevel logLevel, EventId eventId, 
             TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
+            if (logLevel == LogLevel.Error)
+                return;
+
+            string[] pathAction = formatter(state, exception).Split(';');
             var log = new Log
             {
                 Id = Guid.NewGuid(),
                 Date = DateTime.Now,
-                Action = formatter(state, exception),
-                LogLevel = logLevel.ToString()
+                LogLevel = logLevel.ToString(),
+                Path = pathAction[0],
+                Action = pathAction[1],
             };
             _db.Logs.Add(log);
             _db.SaveChanges();  //ORDER BY Date чтобы нормально просматрівать

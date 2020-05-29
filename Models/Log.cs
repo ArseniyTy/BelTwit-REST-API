@@ -9,7 +9,8 @@ namespace BelTwit_REST_API.Models
     {
         public Guid Id { get; set; }
         public DateTime Date { get; set; }
-        public string Action { get; set; }
         public string LogLevel { get; set; }
+        public string Path { get; set; }
+        public string Action { get; set; }
     }
 }
