@@ -10,6 +10,7 @@ using BelTwit_REST_API.Logging;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using BelTwit_REST_API.ModelsJSON;
+using Microsoft.AspNetCore.Authorization;
 
 /*General:
  * Разделение на роли: у админа должна быть возможность редактировать все поля
@@ -22,15 +23,6 @@ using BelTwit_REST_API.ModelsJSON;
  - ретвит
  - комменты и лайки к твитам
  */
-
-
-/*User:                   
-* Role=admin(system enum)  - get all ...
-*/
-
-
-
-//https://metanit.com/sharp/aspnet5/15.5.php!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 
@@ -204,7 +196,7 @@ namespace BelTwit_REST_API.Controllers
 
             _db.Users.Add(user);
             _db.SaveChanges();
-            return new ObjectResult(user);
+            return Ok(user);
         }
 
         [HttpPut("update")]
@@ -228,24 +220,97 @@ namespace BelTwit_REST_API.Controllers
                 userFromDb.Password = newUser.Password;
 
             _db.SaveChanges();
-            return new ObjectResult(userFromDb);
+            return Ok(userFromDb);
         }
+
 
         [HttpDelete("delete")]
         public ActionResult DeleteUser([FromBody]User user)
         {
-            var userFromDb = _db.Users.
-                FirstOrDefault(u => u.Login == user.Login);
+            var userFromDb = _db.Users
+                .Include(p => p.Subscribers)
+                .Include(p => p.Subscriptions)
+                .Include(p => p.Tweets)
+                .Include(p=>p.TweetRateStates)
+                .FirstOrDefault(u => u.Login == user.Login);
             if (userFromDb == null)
                 return NotFound("There is no such a user");
             if (userFromDb.Password != SecurityService.GetHash(user.Password, userFromDb.PasswordSalt))
                 return new ForbidResult("Password is incorrect");
 
+            #region РучнаяЧистка(т.к. в контексте DeleteBehaviour.Restrict, а по другому і нельзя)
+            _db.SubscriberSubscriptions.RemoveRange(userFromDb.Subscriptions);
+            _db.SubscriberSubscriptions.RemoveRange(userFromDb.Subscribers);
+            _db.UserRateStates.RemoveRange(userFromDb.TweetRateStates);
+            foreach (var tweet in userFromDb.Tweets)
+            {
+                var tweetComments = _db.Comments
+                    .Where(p => p.TweetId == tweet.Id).ToList();
+                _db.Comments.RemoveRange(tweetComments);
 
+                var tweetRates = _db.UserRateStates
+                    .Where(p => p.TweetId == tweet.Id).ToList();
+                _db.UserRateStates.RemoveRange(tweetRates);
+            }
+            #endregion
             _db.Users.Remove(userFromDb);
             _db.SaveChanges();
             return Ok();
         }
+
+
+        [HttpDelete("admin-delete")]
+        public ActionResult DeleteUserAdmin([FromBody]JwtWtihObject<string> jwtWithUserLogin)
+        {
+            JWT token;
+            try
+            {
+                token = new JWT(jwtWithUserLogin.JWT);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            var user = _db.Users
+                .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (user == null)
+                return NotFound("Your jwt doesn't match any user!");
+            if (!user.IsAdmin)
+                return BadRequest("This method is only for administrators!");
+
+
+
+            var userToDelete = _db.Users
+                    .Include(p=>p.Subscribers)
+                    .Include(p => p.Subscriptions)
+                    .Include(p => p.Tweets)
+                    .Include(p => p.TweetRateStates)
+                    .FirstOrDefault(p => p.Login == jwtWithUserLogin.WithJWTObject);
+            if (userToDelete == null)
+                return NotFound("There is no user with such Id");
+            if (userToDelete == user)
+                return BadRequest("User another request to delete your account");
+
+            #region РучнаяЧистка(т.к. в контексте DeleteBehaviour.Restrict, а по другому і нельзя)
+            _db.SubscriberSubscriptions.RemoveRange(userToDelete.Subscriptions);
+            _db.SubscriberSubscriptions.RemoveRange(userToDelete.Subscribers);
+            _db.UserRateStates.RemoveRange(userToDelete.TweetRateStates);
+            foreach (var tweet in userToDelete.Tweets)
+            {
+                var tweetComments = _db.Comments
+                    .Where(p => p.TweetId == tweet.Id).ToList();
+                _db.Comments.RemoveRange(tweetComments);
+
+                var tweetRates = _db.UserRateStates
+                    .Where(p => p.TweetId == tweet.Id).ToList();
+                _db.UserRateStates.RemoveRange(tweetRates);
+            }
+            #endregion
+            _db.Users.Remove(userToDelete);
+            _db.SaveChanges();
+            return Ok();
+        }
+
 
 
         [HttpPost("authentificate")]
