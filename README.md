@@ -1,8 +1,31 @@
 # BelTwit-REST-API
-## Features of the project
 
 
-## UserController
+## About the API
+> This is API that gives your a possibility to manupulate with tweets (some blocks of news, that users post). The idea was to create a simulation of popular social network __twitter__. 
+The API consistes of __3 controllers__: 
+* [UserController](#usercontroller) - create, modify and delete users. Subscribe/unsubscribe + getSubscriptions/Subscribers. 
+* [AuthController](#authcontroller) - authentificate users (by JWT) + updating tokens
+* [TwitterController](#twittercontroller) - create and delete tweets. Comment, rate(likes/dislikes), retweet. Get tweets by TweetId/UserLogin
+
+## Special features of the project
+- [x] __3__ controllers, __40__ methods, __9__ request bodies
+- [x] __HEAD__ and __OPTIONS__ methods realisation
+- [x] Models for requests bodies realisation with __T-type__ and __Tuples__ 
+- [x] Authentification of the user with __JWT__ (created __manually__ without any libraries)
+- [x] __2 tokens__ authentification (JWT + __RefreshTokens__ in database)
+- [x] __Admin user role__ is available
+- [x] Sophisticated work with the __database__ (many-to-many, one-to-many realationships)
+- [x] __Self-referencing many-to-many__ connection (for subscribing system)
+- [x] Beautiful and convenient __documentation__
+
+
+
+
+
+
+
+## UserController(16 methods)
 | Method    | URL | Body | Description | Status codes |
 | :-------: | :-- | :--- | :---------- | :----------- |
 |__OPTIONS__| api/user/get-subscribers|||`200`
@@ -25,7 +48,7 @@
 
 
 
-## AuthController
+## AuthController(6 methods)
 | Method    | URL | Body | Description | Status codes |
 | :-------: | :-- | :--- | :---------- | :----------- |
 |__OPTIONS__| api/auth 			 	|||`200`
@@ -37,7 +60,7 @@
 
 
 
-## TwitterController
+## TwitterController(18 methods)
 | Method    | URL | Body | Description | Status codes |
 | :-------: | :-- | :--- | :---------- | :----------- |
 |__OPTIONS__| api/twitter/getById/{id} 	 |||`200`

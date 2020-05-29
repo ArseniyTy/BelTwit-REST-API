@@ -12,18 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using BelTwit_REST_API.ModelsJSON;
 using Microsoft.AspNetCore.Authorization;
 
-/*General:
- * Разделение на роли: у админа должна быть возможность редактировать все поля
- * http://localhost:port main get request -> инфа о сервисе (документация) - лучше head
- * 
- * твиттер
- - у юзера есть возможность добавлять твит
- - подписываться на других юзеров
- - получать все твиты на подписаных юзеров
- - ретвит
- - комменты и лайки к твитам
- */
-
 
 
 namespace BelTwit_REST_API.Controllers
