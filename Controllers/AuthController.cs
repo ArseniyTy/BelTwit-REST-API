@@ -42,6 +42,36 @@ namespace BelTwit_REST_API.Controllers
         }
 
 
+
+
+        [HttpHead("get-subscriptions")]
+        public ActionResult GetSubscriptionsHead([FromBody]string accessToken)
+        {
+            JWT token;
+            try
+            {
+                token = new JWT(accessToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[GET]api/auth/get-subscriptions" + ex.Message);
+                return BadRequest();
+            }
+
+            var user = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (user == null)
+                return NotFound();
+
+
+            _db.Entry(user).Collection(p => p.Subscriptions).Load();
+            //выбірает всех, кто есть в бд
+            var subscriptions = user.Subscriptions
+                .Where(p => _db.Users.FirstOrDefault(i => i.Id == p.OnWhomSubscribeId) != null)
+                .Select(p => _db.Users.FirstOrDefault(i => i.Id == p.OnWhomSubscribeId))
+                .ToList();
+
+            return Ok();
+        }
         [HttpGet("get-subscriptions")]
         public ActionResult GetSubscriptions([FromBody]string accessToken)
         {
@@ -71,6 +101,35 @@ namespace BelTwit_REST_API.Controllers
             return Ok(subscriptions);
         }
 
+
+        [HttpHead("get-subscribers")]
+        public ActionResult GetSubscribersHead([FromBody]string accessToken)
+        {
+            JWT token;
+            try
+            {
+                token = new JWT(accessToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[GET]api/auth/get-subscribers" + ex.Message);
+                return BadRequest();
+            }
+
+            var user = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
+            if (user == null)
+                return NotFound();
+
+
+            _db.Entry(user).Collection(p => p.Subscribers).Load();
+            //выбірает всех, кто есть в бд
+            var subscribers = user.Subscribers
+                .Where(p => _db.Users.FirstOrDefault(i => i.Id == p.WhoSubscribeId) != null)
+                .Select(p => _db.Users.FirstOrDefault(i => i.Id == p.WhoSubscribeId))
+                .ToList();
+
+            return Ok();
+        }
         [HttpGet("get-subscribers")]
         public ActionResult GetSubscribers([FromBody]string accessToken)
         {
@@ -187,12 +246,16 @@ namespace BelTwit_REST_API.Controllers
 
 
 
-        //в будущем только для admin + возможность получіть одного передавая модельку
+        [HttpHead]
+        public ActionResult GetUsersHead()
+        {
+            return Ok();
+        }
         [HttpGet]
-        public IEnumerable<User> GetUsers()
+        public ActionResult GetUsers()
         {
             var users = _db.Users.ToList();
-            return users;
+            return Ok(users);
         }
 
         [HttpPost("create")]
@@ -384,6 +447,24 @@ namespace BelTwit_REST_API.Controllers
             return Ok(token);
         }
 
+
+
+        [HttpHead("authorize")]
+        public ActionResult AuthorizeUserHead([FromBody]string accessToken)
+        {
+            JWT token;
+            try
+            {
+                token = new JWT(accessToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"[GET]api/auth/authorize" + ex);
+                return BadRequest();
+            }
+
+            return Ok();
+        }
         [HttpGet("authorize")]
         public ActionResult AuthorizeUser([FromBody]string accessToken)
         {
