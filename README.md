@@ -1,5 +1,5 @@
 # BelTwit-REST-API
-
+## Features of the project
 
 
 ## AuthController
@@ -34,13 +34,16 @@
 | DELETE | api/twitter/comment-tweet	 |[JwtWithCommentId model](#jwtwithid-json-model) | Delete comment by Id. JWT and TweetId required. Admin can delte any comment.|`200`, `400`, `404`
 
 
+
+
+
 ## Controllers bodies:
 
 #### User JSON model:
 ```json
 {
-  "Login": "yourLogin",
-  "Password": "yourPassword"
+  	"Login": "yourLogin",
+  	"Password": "yourPassword"
 }
 ```
 #### 2-users JSON tuple:
@@ -59,8 +62,8 @@
 #### AccessRefreshToken JSON model:
 ```json
 {
-  "AccessToken": "yourJWTValue",
-  "RefreshToken": "yourRefreshTokenValue",
+  	"AccessToken": "yourJWTValue",
+  	"RefreshToken": "yourRefreshTokenValue",
 }
 ```
 #### UserSubscribe/Unsubscribe JSON model:
@@ -73,17 +76,17 @@
 #### JwtWithTweet JSON model:
 ```json
 {
-  "JWT": "yourJWTValue",
-  "WithJWTObject": {
-	  "Content": "It is my tweet"
+  	"JWT": "yourJWTValue",
+  	"WithJWTObject": {
+	  	"Content": "It is my tweet"
   }
 }
 ```
 #### JwtWithId JSON model:
 ```json
 {
-  "JWT": "yourJWTValue",
-  "WithJWTObject": "yourTweetOrCommentId"
+  	"JWT": "yourJWTValue",
+  	"WithJWTObject": "yourTweetOrCommentId"
 }
 ```
 
