@@ -39,8 +39,6 @@ namespace BelTwit_REST_API.Controllers
         {
             _db = context;
             _logger = loggerFactory.CreateLogger("DatabaseLogger");
-
-           //_logger.LogInformation("First log");
         }
 
 
@@ -52,14 +50,15 @@ namespace BelTwit_REST_API.Controllers
             {
                 token = new JWT(accessToken);
             }
-            catch (Exception ex) //token expired
+            catch (Exception ex)
             {
+                _logger.LogError($"[GET]api/auth/get-subscriptions" + ex.Message);
                 return BadRequest(ex.Message);
             }
 
             var user = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
             if (user == null)
-                return BadRequest("No user that matches this JWT");
+                return NotFound("No user that matches this JWT");
 
 
             _db.Entry(user).Collection(p => p.Subscriptions).Load();
@@ -80,14 +79,15 @@ namespace BelTwit_REST_API.Controllers
             {
                 token = new JWT(accessToken);
             }
-            catch (Exception ex) //token expired
+            catch (Exception ex)
             {
+                _logger.LogError($"[GET]api/auth/get-subscribers" + ex.Message);
                 return BadRequest(ex.Message);
             }
 
             var user = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
             if (user == null)
-                return BadRequest("No user that matches this JWT");
+                return NotFound("No user that matches this JWT");
 
 
             _db.Entry(user).Collection(p => p.Subscribers).Load();
@@ -110,18 +110,19 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex) //token expired
             {
+                _logger.LogError($"[POST]api/auth/subscribe" + ex.Message);
                 return BadRequest(ex.Message);
             }
 
             var userWhoSubscribe = _db.Users
                 .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
             if (userWhoSubscribe == null)
-                return BadRequest("No user that matches this JWT");
+                return NotFound("No user that matches this JWT");
 
             var userToSubscribe = _db.Users
                 .FirstOrDefault(p => p.Login == subInfo.WithJWTObject);
             if (userToSubscribe == null)
-                return BadRequest("No user that matches you entered login");
+                return NotFound("No user that matches you entered login");
 
             var subSub = new SubscriberSubscription
             {
@@ -131,6 +132,9 @@ namespace BelTwit_REST_API.Controllers
             _db.SubscriberSubscriptions.Add(subSub);
             _db.SaveChanges();
 
+
+            _logger.LogInformation($"[POST]api/auth/subscribe;" +
+                                    $"User [{userWhoSubscribe.Login}] subscribed to [{userToSubscribe.Id}]");
             return Ok(subSub);
         }
 
@@ -142,27 +146,36 @@ namespace BelTwit_REST_API.Controllers
             {
                 token = new JWT(subInfo.JWT);
             }
-            catch(Exception ex) //token expired
+            catch(Exception ex)
             {
+                _logger.LogError($"[DELETE]api/auth/unsubscribe" + ex.Message);
                 return BadRequest(ex.Message);
             }
 
             var userWhoSubscribe = _db.Users.FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
             if (userWhoSubscribe == null)
-                return BadRequest("No user that matches this JWT");
+                return NotFound("No user that matches this JWT");
 
             var userToSubscribe = _db.Users.FirstOrDefault(p => p.Login == subInfo.WithJWTObject);
             if (userToSubscribe == null)
-                return BadRequest("No user in database that matches you entered login");
+                return NotFound("No user in database that matches you entered login");
 
             var subSub = _db.SubscriberSubscriptions
                 .FirstOrDefault(p => p.WhoSubscribeId == userWhoSubscribe.Id
                                   && p.OnWhomSubscribeId == userToSubscribe.Id);
             if (subSub == null)
-                return BadRequest("You are not subscribed to this user");
+            {
+                string ex = "You are not subscribed to this user";
+                _logger.LogError($"[DELETE]api/auth/unsubscribe" + ex);
+                return BadRequest(ex);
+            }
 
             _db.SubscriberSubscriptions.Remove(subSub);
             _db.SaveChanges();
+
+
+            _logger.LogInformation($"[DELETE]api/auth/unsubscribe;" +
+                                   $"User [{userWhoSubscribe.Login}] unsubscribed from [{userToSubscribe.Id}]");
             return Ok(subSub);
         }
 
@@ -187,7 +200,11 @@ namespace BelTwit_REST_API.Controllers
         {
             var userFromDb = _db.Users.FirstOrDefault(u => u.Login == user.Login);
             if (userFromDb != null)
-                return BadRequest("The user with such a login currently exists");
+            {
+                string ex = "The user with such a login currently exists";
+                _logger.LogError($"[POST]api/auth/create" + ex);
+                return BadRequest(ex);
+            }
 
 
             user.Id = new Guid();
@@ -196,6 +213,11 @@ namespace BelTwit_REST_API.Controllers
 
             _db.Users.Add(user);
             _db.SaveChanges();
+
+
+
+            _logger.LogInformation($"[POST]api/auth/create;" +
+                                   $"User [{user.Login}] was created");
             return Ok(user);
         }
 
@@ -211,7 +233,11 @@ namespace BelTwit_REST_API.Controllers
             if (userFromDb == null)
                 return NotFound("There is no such a user");
             if (userFromDb.Password != SecurityService.GetHash(oldUser.Password, userFromDb.PasswordSalt))
-                return new ForbidResult("Password is incorrect");
+            {
+                string ex = "Password is incorrect";
+                _logger.LogError($"[PUT]api/auth/update" + ex);
+                return new ForbidResult(ex);
+            }
 
 
             if (newUser.Login != null)
@@ -220,6 +246,9 @@ namespace BelTwit_REST_API.Controllers
                 userFromDb.Password = newUser.Password;
 
             _db.SaveChanges();
+
+            _logger.LogInformation($"[PUT]api/auth/update;" +
+                                   $"User [{userFromDb.Login}] was modified");
             return Ok(userFromDb);
         }
 
@@ -236,7 +265,11 @@ namespace BelTwit_REST_API.Controllers
             if (userFromDb == null)
                 return NotFound("There is no such a user");
             if (userFromDb.Password != SecurityService.GetHash(user.Password, userFromDb.PasswordSalt))
-                return new ForbidResult("Password is incorrect");
+            {
+                string ex = "Password is incorrect";
+                _logger.LogError($"[DELETE]api/auth/delete" + ex);
+                return new ForbidResult(ex);
+            }
 
             #region РучнаяЧистка(т.к. в контексте DeleteBehaviour.Restrict, а по другому і нельзя)
             _db.SubscriberSubscriptions.RemoveRange(userFromDb.Subscriptions);
@@ -255,6 +288,10 @@ namespace BelTwit_REST_API.Controllers
             #endregion
             _db.Users.Remove(userFromDb);
             _db.SaveChanges();
+
+
+            _logger.LogInformation($"[DELETE]api/auth/delete;" +
+                                   $"User [{userFromDb.Login}] was deleted");
             return Ok();
         }
 
@@ -269,6 +306,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[DELETE]api/auth/admin-delete" + ex);
                 return BadRequest(ex.Message);
             }
             var user = _db.Users
@@ -276,7 +314,11 @@ namespace BelTwit_REST_API.Controllers
             if (user == null)
                 return NotFound("Your jwt doesn't match any user!");
             if (!user.IsAdmin)
-                return BadRequest("This method is only for administrators!");
+            {
+                string ex = "This method is only for administrators";
+                _logger.LogError($"[DELETE]api/auth/admin-delete" + ex);
+                return new ForbidResult(ex);
+            }
 
 
 
@@ -289,7 +331,11 @@ namespace BelTwit_REST_API.Controllers
             if (userToDelete == null)
                 return NotFound("There is no user with such Id");
             if (userToDelete == user)
-                return BadRequest("User another request to delete your account");
+            {
+                string ex = "You can't delete this account with this method";
+                _logger.LogError($"[DELETE]api/auth/admin-delete" + ex);
+                return new ForbidResult(ex);
+            }
 
             #region РучнаяЧистка(т.к. в контексте DeleteBehaviour.Restrict, а по другому і нельзя)
             _db.SubscriberSubscriptions.RemoveRange(userToDelete.Subscriptions);
@@ -308,6 +354,9 @@ namespace BelTwit_REST_API.Controllers
             #endregion
             _db.Users.Remove(userToDelete);
             _db.SaveChanges();
+
+            _logger.LogInformation($"[DELETE]api/auth/admin-delete;" +
+                                   $"User [{userToDelete.Login}] was deleted by admin [{user.Login}]");
             return Ok();
         }
 
@@ -321,10 +370,17 @@ namespace BelTwit_REST_API.Controllers
             if (userFromDb == null)
                 return NotFound("There is no such a user");
             if (userFromDb.Password != SecurityService.GetHash(user.Password,userFromDb.PasswordSalt))
-                return new ForbidResult("Password is incorrect");
+            {
+                string ex = "Password is incorrect";
+                _logger.LogError($"[POST]api/auth/authentificate" + ex);
+                return new ForbidResult(ex);
+            }
 
 
             var token = new AccessRefreshToken(userFromDb).ParseToJSON();
+
+            _logger.LogInformation($"[DELETE]api/auth/admin-delete;" +
+                                   $"User [{userFromDb.Login}] was authentificated");
             return Ok(token);
         }
 
@@ -338,6 +394,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError($"[GET]api/auth/authorize" + ex);
                 return BadRequest(ex.Message);
             }
 
@@ -361,6 +418,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[POST]api/auth/update-tokens" + ex);
                 return BadRequest(ex.Message);
             }
 

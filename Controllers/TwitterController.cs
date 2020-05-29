@@ -13,7 +13,6 @@ using BelTwit_REST_API.ModelsJSON;
 /*TwitterController: 
  * 
  * 
- * 2)Logirovanie vsego (pered etim dropnut db). Esli admin, to ukazivar, chto LEHA(admin) dobavil ...
  * 3)Dobavit kodi d readme i krasivo sostavit get, post, put, delete
  * 4)Dobavit head + options metodi
  * 
@@ -47,6 +46,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[GET]api/twitter/getById/id;" + ex.Message);
                 return BadRequest(ex.Message);
             }
 
@@ -54,7 +54,8 @@ namespace BelTwit_REST_API.Controllers
                 .Include(p => p.TweetComments)
                 .FirstOrDefault(p => p.Id == idGuid);
             if (tweet == null)
-                return BadRequest("Such tweet doen't exist");
+                return NotFound("There is no such a tweet");
+
             return Ok(tweet);
         }
 
@@ -64,7 +65,7 @@ namespace BelTwit_REST_API.Controllers
             var user = _db.Users
                 .FirstOrDefault(p => p.Login == login);
             if (user == null)
-                return BadRequest("There is no such a user");
+                return NotFound("There is no such a user");
 
             var tweets = _db.Tweets
                 .Include(p => p.TweetComments)
@@ -85,6 +86,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[GET]api/twitter;" + ex.Message);
                 return BadRequest(ex.Message);
             }
             var user = _db.Users
@@ -121,6 +123,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[POST]api/twitter;" + ex.Message);
                 return BadRequest(ex.Message);
             }
             var user = _db.Users
@@ -144,12 +147,16 @@ namespace BelTwit_REST_API.Controllers
             }
             catch(Exception ex)
             {
+                _logger.LogError($"[POST]api/twitter;" + ex.Message);
                 return BadRequest(ex.Message);
             }
 
             _db.Tweets.Add(tweet);
             _db.SaveChanges();
 
+
+            _logger.LogInformation($"[POST]api/twitter;" +
+                                    $"User [{user.Login}] added tweet [{tweet.Id}]");
             return Ok(tweet);
         }
 
@@ -163,6 +170,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[DELETE]api/twitter;" + ex.Message);
                 return BadRequest(ex.Message);
             }
             var user = _db.Users
@@ -180,6 +188,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[DELETE]api/twitter;" + ex.Message);
                 return BadRequest(ex.Message);
             }
 
@@ -209,6 +218,10 @@ namespace BelTwit_REST_API.Controllers
             _db.Tweets.Remove(tweet);
             _db.SaveChanges();
 
+
+
+            _logger.LogInformation($"[DELETE]api/twitter;" +
+                                    $"User [{user.Login}] deleted tweet [{tweet.Id}]");
             return Ok(tweet);
         }
 
@@ -223,6 +236,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[POST]api/twitter/retweet;" + ex.Message);
                 return BadRequest(ex.Message);
             }
             var user = _db.Users
@@ -241,6 +255,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[POST]api/twitter/retweet;" + ex.Message);
                 return BadRequest(ex.Message);
             }
 
@@ -256,6 +271,9 @@ namespace BelTwit_REST_API.Controllers
             _db.Tweets.Add(retweet);
             _db.SaveChanges();
 
+
+            _logger.LogInformation($"[POST]api/twitter/retweet;" +
+                                    $"User [{user.Login}] retweeted tweet [{tweet.Id}]. So, tweet [{retweet.Id}] is created");
             return Ok(retweet);
         }
 
@@ -271,6 +289,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[POST]api/twitter/comment-tweet;" + ex.Message);
                 return BadRequest(ex.Message);
             }
             var user = _db.Users
@@ -288,6 +307,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[POST]api/twitter/comment-tweet;" + ex.Message);
                 return BadRequest(ex.Message);
             }
             var tweet = _db.Tweets
@@ -297,7 +317,11 @@ namespace BelTwit_REST_API.Controllers
 
             var commentCont = jwtWithComment.WithJWTObject.WithTweetObject;
             if (commentCont == null || commentCont.Length==0)
-                return BadRequest("Comment must include at least one symbol");
+            {
+                string ex = "Comment must include at least one symbol";
+                _logger.LogError($"[POST]api/twitter/comment-tweet;" + ex);
+                return BadRequest(ex);
+            }
 
             var comment = new Comment
             {
@@ -309,6 +333,9 @@ namespace BelTwit_REST_API.Controllers
             _db.Comments.Add(comment);
             _db.SaveChanges();
 
+
+            _logger.LogInformation($"[POST]api/twitter/comment-tweet;" +
+                                    $"User [{user.Login}] commented tweet [{tweet.Id}]. So, comment [{comment.Id}] is created");
             return Ok(comment);
         }
 
@@ -323,6 +350,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[DELETE]api/twitter/comment-tweet;" + ex.Message);
                 return BadRequest(ex.Message);
             }
             var user = _db.Users
@@ -340,6 +368,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[DELETE]api/twitter/comment-tweet;" + ex.Message);
                 return BadRequest(ex.Message);
             }
 
@@ -364,6 +393,9 @@ namespace BelTwit_REST_API.Controllers
             _db.Comments.Remove(comment);
             _db.SaveChanges();
 
+
+            _logger.LogInformation($"[DELETE]api/twitter/comment-tweet;" +
+                                    $"User [{user.Login}] deleted comment [{comment.Id}]");
             return Ok(comment);
         }
 
@@ -379,6 +411,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[PUT]api/twitter/rate-tweet;" + ex.Message);
                 return BadRequest(ex.Message);
             }
             var user = _db.Users
@@ -396,6 +429,7 @@ namespace BelTwit_REST_API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError($"[PUT]api/twitter/rate-tweet;" + ex.Message);
                 return BadRequest(ex.Message);
             }
             var tweet = _db.Tweets
@@ -406,7 +440,11 @@ namespace BelTwit_REST_API.Controllers
 
             int stateFromJSON = (int)jwtWithInfo.WithJWTObject.WithTweetObject;
             if (stateFromJSON != -1 && stateFromJSON != 0 && stateFromJSON != 1)
-                return BadRequest("There is no such rate state");
+            {
+                string ex = "There is no such rate state";
+                _logger.LogError($"[PUT]api/twitter/rate-tweet;" + ex);
+                return BadRequest(ex);
+            }
 
 
             _db.Entry(tweet).Collection(p => p.TweetRateStates).Load();
@@ -415,7 +453,11 @@ namespace BelTwit_REST_API.Controllers
             if (stateFromDb != null)
             {
                 if ((int)stateFromDb.RateState == stateFromJSON)
-                    return BadRequest("You have already rated this tweet the same way");
+                {
+                    string ex = "You have already rated this tweet the same way";
+                    _logger.LogError($"[PUT]api/twitter/rate-tweet;" + ex);
+                    return BadRequest(ex);
+                }
 
 
 
@@ -447,6 +489,9 @@ namespace BelTwit_REST_API.Controllers
             _db.Tweets.Update(tweet);
             _db.SaveChanges();
 
+
+            _logger.LogInformation($"[PUT]api/twitter/rate-tweet;" +
+                        $"User [{user.Login}] rated tweet [{tweet.Id}]");
             return Ok();
         }
     }
