@@ -86,7 +86,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 token = new JWT(accessToken);
             }
-            catch (Exception ex) //token expired
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -122,7 +122,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 token = new JWT(jwtWithTweet.JWT);
             }
-            catch (Exception ex) //token expired
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -164,12 +164,11 @@ namespace BelTwit_REST_API.Controllers
             {
                 token = new JWT(jwtWithTweetId.JWT);
             }
-            catch (Exception ex) //token expired
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
             var user = _db.Users
-                .Include(p => p.Tweets)
                 .FirstOrDefault(p => p.Id == token.PAYLOAD.Sub);
             if (user == null)
                 return NotFound("Your jwt doesn't match any user!");
@@ -189,7 +188,7 @@ namespace BelTwit_REST_API.Controllers
 
 
             Tweet tweet;
-            if(token.PAYLOAD.Admin)
+            if(user.IsAdmin)
             {
                 tweet = _db.Tweets
                     .FirstOrDefault(p => p.Id == tweetId);
@@ -198,6 +197,7 @@ namespace BelTwit_REST_API.Controllers
             }
             else
             {
+                _db.Entry(user).Collection(p => p.Tweets).Load();
                 tweet = user.Tweets
                     .FirstOrDefault(p => p.Id == tweetId);
                 if (tweet == null)
@@ -224,7 +224,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 token = new JWT(jwtWithTweetId.JWT);
             }
-            catch (Exception ex) //token expired
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -267,14 +267,12 @@ namespace BelTwit_REST_API.Controllers
         [HttpPost("comment-tweet")]
         public ActionResult WriteCommentToTweet([FromBody]JwtWtihObject<TweetIdWithObject<string>> jwtWithComment)
         {
-            //пока что выполняет функцію того, что только авторізованные пользователі могут коменты
-            //писать, но в будущем нужна для прикрутки авторства коменту
             JWT token;
             try
             {
                 token = new JWT(jwtWithComment.JWT);
             }
-            catch (Exception ex) //token expired
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -321,14 +319,12 @@ namespace BelTwit_REST_API.Controllers
         [HttpDelete("comment-tweet")]
         public ActionResult DeleteCommentToTweet([FromBody]JwtWtihObject<Guid> jwtWithCommentId)
         {
-            //пока что выполняет функцію того, что только авторізованные пользователі могут коменты
-            //писать, но в будущем нужна для прикрутки авторства коменту
             JWT token;
             try
             {
                 token = new JWT(jwtWithCommentId.JWT);
             }
-            catch (Exception ex) //token expired
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -349,11 +345,25 @@ namespace BelTwit_REST_API.Controllers
             {
                 return BadRequest(ex.Message);
             }
-            _db.Entry(user).Collection(p => p.TweetComments).Load();
-            var comment = user.TweetComments
-                .FirstOrDefault(p => p.Id == commentId);
-            if (comment == null)
-                return NotFound("There is no comment with such Id");
+
+
+            Comment comment;
+            if (user.IsAdmin)
+            {
+                comment = _db.Comments
+                    .FirstOrDefault(p => p.Id == commentId);
+                if (comment == null)
+                    return NotFound("There is no comment with such Id");
+            }
+            else
+            {
+                _db.Entry(user).Collection(p => p.TweetComments).Load();
+                comment = user.TweetComments
+                    .FirstOrDefault(p => p.Id == commentId);
+                if (comment == null)
+                    return NotFound("You haven't comment with such Id");
+            }
+            
             _db.Comments.Remove(comment);
             _db.SaveChanges();
 
@@ -370,7 +380,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 token = new JWT(jwtWithInfo.JWT);
             }
-            catch (Exception ex) //token expired
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
