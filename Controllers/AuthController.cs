@@ -48,7 +48,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 string ex = "Password is incorrect";
                 _logger.LogError($"[POST]api/auth/authentificate" + ex);
-                return Forbid(ex);
+                return StatusCode(403, ex);
             }
 
 

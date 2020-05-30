@@ -195,6 +195,10 @@ namespace BelTwit_REST_API.Controllers
             {
                 _db.Entry(sub).Collection(p => p.Tweets).Load();
                 var subTweets = sub.Tweets;
+                foreach (var subTweet in subTweets)
+                {
+                    _db.Entry(subTweet).Collection(p => p.TweetComments).Load();
+                }
                 alltweets.AddRange(subTweets);
             }
 

@@ -170,7 +170,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 token = new JWT(subInfo.JWT);
             }
-            catch (Exception ex) //token expired
+            catch (Exception ex)
             {
                 _logger.LogError($"[POST]api/auth/subscribe" + ex.Message);
                 return BadRequest(ex.Message);
@@ -185,6 +185,8 @@ namespace BelTwit_REST_API.Controllers
                 .FirstOrDefault(p => p.Login == subInfo.WithJWTObject);
             if (userToSubscribe == null)
                 return NotFound("No user that matches you entered login");
+            if (userToSubscribe == userWhoSubscribe)
+                return BadRequest("You can't subscribe on yourself");
 
             var subSub = new SubscriberSubscription
             {
@@ -309,16 +311,16 @@ namespace BelTwit_REST_API.Controllers
             {
                 string ex = "Password is incorrect";
                 _logger.LogError($"[PUT]api/auth/update" + ex);
-                return Forbid(ex);
+                return StatusCode(403, ex);
             }
 
 
             if (newUser.Login != null)
                 userFromDb.Login = newUser.Login;
             if (newUser.Password != null)
-                userFromDb.Password = newUser.Password;
-
+                userFromDb.Password = SecurityService.GetHash(newUser.Password, userFromDb.PasswordSalt);
             _db.SaveChanges();
+
 
             _logger.LogInformation($"[PUT]api/auth/update;" +
                                    $"User [{userFromDb.Login}] was modified");
@@ -340,7 +342,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 string ex = "Password is incorrect";
                 _logger.LogError($"[DELETE]api/auth/delete" + ex);
-                return Forbid(ex);
+                return StatusCode(403, ex);
             }
 
             #region РучнаяЧистка(т.к. в контексте DeleteBehaviour.Restrict, а по другому і нельзя)
@@ -395,7 +397,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 string ex = "This method is only for administrators";
                 _logger.LogError($"[DELETE]api/auth/admin-delete" + ex);
-                return Forbid(ex);
+                return StatusCode(403, ex);
             }
 
 
@@ -412,7 +414,7 @@ namespace BelTwit_REST_API.Controllers
             {
                 string ex = "You can't delete this account with this method";
                 _logger.LogError($"[DELETE]api/auth/admin-delete" + ex);
-                return Forbid(ex);
+                return StatusCode(403, ex);
             }
 
             #region РучнаяЧистка(т.к. в контексте DeleteBehaviour.Restrict, а по другому і нельзя)

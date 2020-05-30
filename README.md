@@ -30,11 +30,11 @@ The API consistes of __3 controllers__:
 | Method    | URL | Body | Description | Status codes |
 | :-------: | :-- | :--- | :---------- | :----------- |
 |__OPTIONS__| api/user/get-subscribers|||`200`
-| HEAD   | api/user/get-subscribers	  |||`200`, `400`, `404`
+| HEAD   | api/user/get-subscribers	  |`"YourJWTValue"`||`200`, `400`, `404`
 | GET    | api/user/get-subscribers	  |`"YourJWTValue"`| Get your subscribers(who subscribed on you) by JWT value.|`200`, `400`, `404`
 |__OPTIONS__| api/user/subscribe      |||`200`
-| HEAD   | api/user/subscribe 	   	  |||`200`, `400`, `404`
-| GET 	 | api/user/subscribe|`"YourJWTValue"`| Get your subscriptions(on whom you subscribed) by JWT value.|`200`, `400`, `404`
+| HEAD   | api/user/subscribe 	   	  |`"YourJWTValue"`||`200`, `400`, `404`
+| GET 	 | api/user/subscribe		  |`"YourJWTValue"`| Get your subscriptions(on whom you subscribed) by JWT value.|`200`, `400`, `404`
 | POST   | api/user/subscribe      	  |[UserSubscribe model](#usersubscribe/unsubscribe-json-model)| Subscribes on the other user by your own JWT value and login of the other user.|`200`, `400`, `404`
 | DELETE | api/user/subscribe      	  |[UserUnsubscribe model](#usersubscribe/unsubscribe-json-model)| Unsubscribes from the other user by your own JWT value and login of the other user.|`200`, `400`, `404`
 |__OPTIONS__| api/user 			   	  |||`200`
@@ -53,9 +53,9 @@ The API consistes of __3 controllers__:
 | Method    | URL | Body | Description | Status codes |
 | :-------: | :-- | :--- | :---------- | :----------- |
 |__OPTIONS__| api/auth 			 	|||`200`
-| HEAD   | api/auth 			 	|||`200`, `400`
+| HEAD   | api/auth 			 	|`"YourJWTValue"`||`200`, `400`
 | GET    | api/auth     	 	 	|`"YourJWTValue"`| Authorize the user by JWT value as a string.|`200`, `400`
-| POST   | api/auth	 			 	|[User model](#user-json-model)| Authentificate the user by creating JWT(30 min) and RefreshToken(60 days).|`200`, `403`, `404`
+| POST   | api/auth	 			 	|[User model](#user-json-model)| Authentificate the user by creating JWT(30 min) and RefreshToken(60 days). You can't have more than 5 RefreshTokens (or others will be deleted)|`200`, `403`, `404`
 |__OPTIONS__| api/auth/update-tokens|||`200`
 | POST   | api/auth/update-tokens	|[AccessRefreshToken model](#accessrefreshtoken-json-model)  | Refresh your JWT[or AccessToken] (for 30 minutes) and your RefreshToken (for 60 days).|`200`, `400`
 
@@ -71,7 +71,7 @@ The API consistes of __3 controllers__:
 | HEAD   | api/twitter/getByLogin/{login}||||`200`, `404`
 | GET    | api/twitter/getByLogin/{login}|| Get all tweets of user with "login".|`200`, `404`
 |__OPTIONS__| api/twitter 				 |||`200`
-| HEAD   | api/twitter 					 |||`200`, `400`, `404`
+| HEAD   | api/twitter 					 |`"YourJWTValue"`||`200`, `400`, `404`
 | GET    | api/twitter  				 |`"YourJWTValue"`| Get tweets of your subscriptions(users on whom you've subscribed). JWT required.|`200`, `400`, `404`
 | POST   | api/twitter                   |[JwtWithTweet model](#jwtwithtweet-json-model)  | Creates a user tweet. JWT and Tweet (Content at least) required.|`200`, `400`, `404`
 | DELETE | api/twitter   				 |[JwtWithTweetId model](#jwtwithid-json-model)   | Deletes a user tweet. JWT and TweetId required. Admin can delte any tweet.|`200`, `400`, `404`
