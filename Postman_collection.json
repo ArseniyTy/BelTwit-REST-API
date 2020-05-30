@@ -1,0 +1,1166 @@
+{
+	"info": {
+		"_postman_id": "cca9bffe-06a2-44ed-91ec-a8be99da36be",
+		"name": "BelTwit REST API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "api/user",
+					"item": [
+						{
+							"name": "api/user",
+							"request": {
+								"method": "OPTIONS",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/user",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllUsers",
+							"request": {
+								"method": "HEAD",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/user",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllUsers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/user",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"login\": \"new2\",\n\t\"password\": \"asdfasdf\",\n\t\"isAdmin\": \"false\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/user",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"Item1\": {\r\n\t\t\"Login\": \"new0\",\r\n\t\t\"Password\": \"asdfasdf\"\r\n\t},\r\n\t\"Item2\": {\r\n\t\t\"Login\": \"new1\",\r\n\t\t\"Password\": \"asdfasdf\"\r\n\t}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/user",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"login\": \"new5\",\n\t\"password\": \"asdfasdf\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/user",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "api/admin-delete",
+					"item": [
+						{
+							"name": "api/user/admin-delete",
+							"request": {
+								"method": "OPTIONS",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/user/admin-delete",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user",
+										"admin-delete"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "admin-delete",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"JWT\": \"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOjJjOWU3NDFjLTQwNTQtNDBlYi03ZWU0LTA4ZDgwNDZlNDMzNCxuYW1lOmFkbWluLGFkbWluOlRydWUsZXhwOjMwLjA1LjIwMjAgMTF8NTV8NDM=.RlRQZHBvTkQwa3pnZmhUMUtLdFJUWVhRWGhGTEI5cVJIMXZwc2ZOOHZnUklRam1CL2JIZFNFTTJTSExrME94bmhXWmpEYjhMNVd0MzQzS20xaWR4WkE9PQ==\",\n\t\"WithJWTObject\": \"new0\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/user/admin-delete",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user",
+										"admin-delete"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "api/user/subscribe ",
+					"item": [
+						{
+							"name": "api/user/subscribe",
+							"request": {
+								"method": "OPTIONS",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/user/subscribe",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user",
+										"subscribe"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-subscriptions",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "HEAD",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOmQwZDEyNWJjLWJkMzAtNDhhYi03ZWUxLTA4ZDgwNDZlNDMzNCxuYW1lOm5ldzMsYWRtaW46RmFsc2UsZXhwOjMwLjA1LjIwMjAgMTF8NTR8MTE=.M0psOU42dlZRczNjMzNJcXhXUHo2bVdRRVByNG1xNUExaWo5T0UySDdTNWtMZ0tVaURWbFlLcGQ2QVYxYzlwdi9XVnVTWW1RWnVscUxob3dSRjNPU2c9PQ==\"",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/user/subscribe",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user",
+										"subscribe"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-subscriptions",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOjYyZDBiZWJjLTM5Y2YtNDU3Ni03ZWUwLTA4ZDgwNDZlNDMzNCxuYW1lOm5ldzIsYWRtaW46RmFsc2UsZXhwOjMwLjA1LjIwMjAgMTF8NDh8MTI=.QkwzeUtlWGJkQ2tlOFoxTFhYTWRtL3I0d3RaU1RaV0ZydnNpeFIySDU2dFdEYjE0YmkyS094OXVlUWlvWVVHRU9xNFRieTlPM1ozZ2QyaFRkTUE2QXc9PQ==\"",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/user/subscribe",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user",
+										"subscribe"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "subscribe",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"JWT\": \"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOmY3ZjYzZTk4LTZlOWYtNGI4ZS1kYWY5LTA4ZDdlZjQxMDNiNyxuYW1lOm5ldzEsZXhwOjE1LjA1LjIwMjAgMTZ8MjZ8MjE=.SW9WZDFNUnUySWU3UGNxNzBUdzZZcDBvVXluV1pUbWM5SGl3c2MxOGJLV1NYVW56MWVQYk1aTHc2SU9WVTU1RmZ3V3pQRG1CTTJYMG81U2pkRzZIc2c9PQ==\",\n\t\"WithJWTObject\": \"new2\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/user/subscribe",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user",
+										"subscribe"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "unsubscribe",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"JWT\": \"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOjYyZDBiZWJjLTM5Y2YtNDU3Ni03ZWUwLTA4ZDgwNDZlNDMzNCxuYW1lOm5ldzIsYWRtaW46RmFsc2UsZXhwOjMwLjA1LjIwMjAgMTF8NDh8MTI=.QkwzeUtlWGJkQ2tlOFoxTFhYTWRtL3I0d3RaU1RaV0ZydnNpeFIySDU2dFdEYjE0YmkyS094OXVlUWlvWVVHRU9xNFRieTlPM1ozZ2QyaFRkTUE2QXc9PQ==\",\n\t\"WithJWTObject\": \"new4\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/user/subscribe",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user",
+										"subscribe"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "api/user/get-subscribers",
+					"item": [
+						{
+							"name": "api/user/get-subscribers",
+							"request": {
+								"method": "OPTIONS",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/user/get-subscribers",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user",
+										"get-subscribers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-subscribers",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "HEAD",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOmQwZDEyNWJjLWJkMzAtNDhhYi03ZWUxLTA4ZDgwNDZlNDMzNCxuYW1lOm5ldzMsYWRtaW46RmFsc2UsZXhwOjMwLjA1LjIwMjAgMTF8NTR8MTE=.M0psOU42dlZRczNjMzNJcXhXUHo2bVdRRVByNG1xNUExaWo5T0UySDdTNWtMZ0tVaURWbFlLcGQ2QVYxYzlwdi9XVnVTWW1RWnVscUxob3dSRjNPU2c9PQ==\"",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/user/get-subscribers",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user",
+										"get-subscribers"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get-subscribers",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOmJiZjE2NDM5LWQ0YTEtNDM5YS03YmU5LTA4ZDdmODM4NTUyZCxuYW1lOm5ldzIsZXhwOjE1LjA1LjIwMjAgMTZ8NTF8MTY=.TjZLald6Y084YzQ4Q3ZVZmJlZW5BRWtHTjBKcXVGM1VxK1NIMDFpd1RaVWRKdTZJVEJ3MzNOSlUrZThOVHJSZ1VaWEVXbEpaM3paTVpTRDZ1VFRzSXc9PQ==\"",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/user/get-subscribers",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"user",
+										"get-subscribers"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "api/auth",
+					"item": [
+						{
+							"name": "api/auth",
+							"request": {
+								"method": "OPTIONS",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/auth",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"auth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "authorize",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "HEAD",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOjYyZDBiZWJjLTM5Y2YtNDU3Ni03ZWUwLTA4ZDgwNDZlNDMzNCxuYW1lOm5ldzIsYWRtaW46RmFsc2UsZXhwOjMwLjA1LjIwMjAgMTF8NDB8NTM=.NWhabjNuV3Fac0t2eHFBdjRkSTlreUNaMlR5OU4xWGlMblpxYXdrUytQUzF5MVJicjlKbVZIYU5uMDRyc3E4ZGViWjdDM29zQmM4N1dCTnZ4NEMzZ1E9PQ==\"",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/auth",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"auth"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "authorize",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOjYyZDBiZWJjLTM5Y2YtNDU3Ni03ZWUwLTA4ZDgwNDZlNDMzNCxuYW1lOm5ldzIsYWRtaW46RmFsc2UsZXhwOjMwLjA1LjIwMjAgMTF8NDB8NTM=.NWhabjNuV3Fac0t2eHFBdjRkSTlreUNaMlR5OU4xWGlMblpxYXdrUytQUzF5MVJicjlKbVZIYU5uMDRyc3E4ZGViWjdDM29zQmM4N1dCTnZ4NEMzZ1E9PQ==\"",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/auth",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"auth"
+									]
+								},
+								"description": "Auth - authorization"
+							},
+							"response": []
+						},
+						{
+							"name": "authentificate",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"login\": \"new2\",\n\t\"password\": \"asdfasdf\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/auth",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"auth"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "api/auth/update-tokens",
+					"item": [
+						{
+							"name": "auth/update-tokens",
+							"request": {
+								"method": "OPTIONS",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/auth/update-tokens",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"auth",
+										"update-tokens"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "update-tokens",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"accessToken\": \"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOmY3ZjYzZTk4LTZlOWYtNGI4ZS1kYWY5LTA4ZDdlZjQxMDNiNyxuYW1lOm5ldzEsZXhwOjEwLjA1LjIwMjAgMHwwMXw1NQ==.UVZEVUdYSG5oUDREZStxQ1ZSKzZubVp6cDI4UFpCVis5Y3I1SHFhRUdOdzh4RU0rcmJYa2x5TEFQNStxL2dKdldxMzJ1b2U1V3piNzZiVVhDdTNCUGc9PQ==\",\r\n    \"refreshToken\": \"822ec0db-b1de-4ae1-c0a4-08d7f45803df\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/auth/update-tokens",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"auth",
+										"update-tokens"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Twitter",
+			"item": [
+				{
+					"name": "api/twitter/getByLogin/{login}",
+					"item": [
+						{
+							"name": "api/twitter/getByLogin/login",
+							"request": {
+								"method": "OPTIONS",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/twitter/getByLogin/login",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter",
+										"getByLogin",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getTweetByLogin",
+							"request": {
+								"method": "HEAD",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/twitter/getByLogin/new1",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter",
+										"getByLogin",
+										"new1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getTweetByLogin",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/twitter/getByLogin/new1",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter",
+										"getByLogin",
+										"new1"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "api/twitter/getById/{id}",
+					"item": [
+						{
+							"name": "twitter/getById/id",
+							"request": {
+								"method": "OPTIONS",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/twitter/getById/1",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter",
+										"getById",
+										"1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getTweetById",
+							"request": {
+								"method": "HEAD",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/twitter/getById/24f1d6d1-d235-4d92-a3ca-08d803aa5804",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter",
+										"getById",
+										"24f1d6d1-d235-4d92-a3ca-08d803aa5804"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getTweetById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/twitter/getById/24f1d6d1-d235-4d92-a3ca-08d803aa5804",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter",
+										"getById",
+										"24f1d6d1-d235-4d92-a3ca-08d803aa5804"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "api/twitter ",
+					"item": [
+						{
+							"name": "api/twitter",
+							"request": {
+								"method": "OPTIONS",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/twitter",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllSubscriptionsTweets",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "HEAD",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOjJjOWU3NDFjLTQwNTQtNDBlYi03ZWU0LTA4ZDgwNDZlNDMzNCxuYW1lOmFkbWluLGFkbWluOlRydWUsZXhwOjMwLjA1LjIwMjAgMTF8NTV8NDM=.RlRQZHBvTkQwa3pnZmhUMUtLdFJUWVhRWGhGTEI5cVJIMXZwc2ZOOHZnUklRam1CL2JIZFNFTTJTSExrME94bmhXWmpEYjhMNVd0MzQzS20xaWR4WkE9PQ==\"",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/twitter",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "getAllSubsctiptionsTweets",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "\"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOjJjOWU3NDFjLTQwNTQtNDBlYi03ZWU0LTA4ZDgwNDZlNDMzNCxuYW1lOmFkbWluLGFkbWluOlRydWUsZXhwOjMwLjA1LjIwMjAgMTF8NTV8NDM=.RlRQZHBvTkQwa3pnZmhUMUtLdFJUWVhRWGhGTEI5cVJIMXZwc2ZOOHZnUklRam1CL2JIZFNFTTJTSExrME94bmhXWmpEYjhMNVd0MzQzS20xaWR4WkE9PQ==\"",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/twitter",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "addTweet",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\t\"JWT\": \"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOmRhODU4MzA3LTBkODUtNDUzZi04MDg5LTA4ZDgwM2FhMzhjYyxuYW1lOm5ldzEsYWRtaW46RmFsc2UsZXhwOjI5LjA1LjIwMjAgMTN8Mjh8MjE=.RlRNdDJKZVZoYTI1cVZJWTdETXFKOXk5NlJzZnR1Nm1hbWI0V09aKzljVXlORUZEdXErYklVV2oxZjlYSDd4OXlIN1RaZHdGd1ZPZU1hQUgxdU0zeEE9P==\",\r\n\t\"WithJWTObject\": {\r\n\t\t\"Content\":\"Tweet5\"\r\n\t}\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/twitter",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteTweet",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"JWT\": \"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOmQ5NGMxNTQxLWVmN2EtNDZhOS1jYTg3LTA4ZDgwMzQ0ZTA0ZSxuYW1lOmFkbWluLGFkbWluOlRydWUsZXhwOjI5LjA1LjIwMjAgMTF8MDB8NDQ=.K1A4c3pJNiszbXprWm9sQ3NVZEs1Vy9ITnVNdGZuYUNiVUZiTDdzTnNOSG0xdmJHME16cmVUbXN0MW5FSEFQTjRCQkNnMUpucjNFK2pJQmNpMkJpS2c9PQ==\",\n\t\"WithJWTObject\": \"33df598c-0ce6-4295-85dd-08d800e67880\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/twitter",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "api/twitter/comment-tweet ",
+					"item": [
+						{
+							"name": "api/twitter/comment-tweet",
+							"request": {
+								"method": "OPTIONS",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/twitter/comment-tweet",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter",
+										"comment-tweet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "comment-tweet",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"JWT\": \"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOjhmZGFlOTgxLWE2M2ItNDg5OS00YTkxLTA4ZDgwM2FiZGI2MixuYW1lOm5ldzIsYWRtaW46RmFsc2UsZXhwOjI5LjA1LjIwMjAgMTJ8MDl8NTY=.WDlrWTgwRVdOTzRBcEZpREJnOTRNRUpGWjJJdmk4V0hGOUtHditPdjcxNFBLZThOK3krM01YSGxEeUF6SEpQT3hZWkFXYzdXakU0dTIvenRYZGtRWlE9PQ==\",\n\t\"WithJWTObject\": {\n\t\t\"TweetId\":\"24f1d6d1-d235-4d92-a3ca-08d803aa5804\",\n\t\t\"WithTweetObject\": \"Comment1\"\n\t}\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/twitter/comment-tweet",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter",
+										"comment-tweet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "comment-tweet(delete)",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"JWT\": \"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOmQwZDEyNWJjLWJkMzAtNDhhYi03ZWUxLTA4ZDgwNDZlNDMzNCxuYW1lOm5ldzMsYWRtaW46RmFsc2UsZXhwOjMwLjA1LjIwMjAgMTJ8MTB8MTg=.TWZpU2s1bzNPUkNLYlBpQ1M4cnFMTFRJRjRPdGFFaWlNZ2tDYTV4QjdlUlNMSXJjQWRSZUh4NHVCSUJKOGlUZzZtN3NnYU1XRTd5bVNzWEEzQ0kzQmc9PQ==\",\n\t\"WithJWTObject\": \"0b6a9b31-84fb-42da-aceb-08d804753cee\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/twitter/comment-tweet",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter",
+										"comment-tweet"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "api/twitter/rate-tweet ",
+					"item": [
+						{
+							"name": "api/twitter/rate-tweet",
+							"request": {
+								"method": "OPTIONS",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/twitter/rate-tweet",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter",
+										"rate-tweet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "rate-tweet",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"JWT\": \"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOjRhOGE2YzM0LTc3ZTEtNDUyYy04MDhhLTA4ZDgwM2FhMzhjYyxuYW1lOm5ldzIsYWRtaW46RmFsc2UsZXhwOjI5LjA1LjIwMjAgMTF8NTl8NTg=.WWU1YXZOWlFzYTJLMDlhdFFwT283RUMvbTJCbU5TVkxiN0luWXhKQ3UyamlwTHNCMFhJVGhtZkxVekZjYkZ0cENPZFNaQlowQ0tNc0xDOEg5ZWFQcFE9PQ==\",\n\t\"WithJWTObject\": {\n\t\t\"TweetId\": \"24f1d6d1-d235-4d92-a3ca-08d803aa5804\",\n\t\t\"WithTweetObject\": \"Like\"\n\t}\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/twitter/rate-tweet",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter",
+										"rate-tweet"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "api/twitter/retweet ",
+					"item": [
+						{
+							"name": "api/twitter/retweet",
+							"request": {
+								"method": "OPTIONS",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:5001/api/twitter/retweet",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter",
+										"retweet"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "retweet",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"JWT\": \"YWxnOkhTMjU2LHR5cDpKV1Q=.c3ViOjYyZDBiZWJjLTM5Y2YtNDU3Ni03ZWUwLTA4ZDgwNDZlNDMzNCxuYW1lOm5ldzIsYWRtaW46RmFsc2UsZXhwOjMwLjA1LjIwMjAgMTJ8MDF8MTQ=.cFdSSkpOMlMrMWJmRHdsWUhGRjdqVktTMFZzUGtOaFRHVitkb1VqS0Ntb2pEOFl6dngxd1dqcnZnWGtNTGh0ZGVteEp4enN3d0VNTG9wQUtVTUVsMkE9PQ==\",\n\t\"WithJWTObject\": \"563bd202-b458-4180-888b-08d8047343ac\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://localhost:5001/api/twitter/retweet",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "5001",
+									"path": [
+										"api",
+										"twitter",
+										"retweet"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}

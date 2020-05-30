@@ -19,8 +19,7 @@ The API consistes of __3 controllers__:
 - [x] __Self-referencing many-to-many__ connection (for subscribing system)
 - [x] __Logging__ of all actions (and writing down them to database)
 - [x] Beautiful and convenient __documentation__
-- [x] All requests are ready for you to test in __Postman__ - `https://www.getpostman.com/collections/d5db783ca00106482d3a` (share link)
-
+- [x] All requests are ready for you to test in __Postman__ - (see `Postman_collection.json` file)
 
 ## UserController(16 methods)
 | Method    | URL | Body | Description | Status codes |
