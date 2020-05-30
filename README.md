@@ -19,24 +19,12 @@ The API consistes of __3 controllers__:
 - [x] __Self-referencing many-to-many__ connection (for subscribing system)
 - [x] __Logging__ of all actions (and writing down them to database)
 - [x] Beautiful and convenient __documentation__
-
-
-
-
-
+- [x] All requests are ready for you to test in __Postman__ - `https://www.getpostman.com/collections/d5db783ca00106482d3a` (share link)
 
 
 ## UserController(16 methods)
 | Method    | URL | Body | Description | Status codes |
 | :-------: | :-- | :--- | :---------- | :----------- |
-|__OPTIONS__| api/user/get-subscribers|||`200`
-| HEAD   | api/user/get-subscribers	  |`"YourJWTValue"`||`200`, `400`, `404`
-| GET    | api/user/get-subscribers	  |`"YourJWTValue"`| Get your subscribers(who subscribed on you) by JWT value.|`200`, `400`, `404`
-|__OPTIONS__| api/user/subscribe      |||`200`
-| HEAD   | api/user/subscribe 	   	  |`"YourJWTValue"`||`200`, `400`, `404`
-| GET 	 | api/user/subscribe		  |`"YourJWTValue"`| Get your subscriptions(on whom you subscribed) by JWT value.|`200`, `400`, `404`
-| POST   | api/user/subscribe      	  |[UserSubscribe model](#usersubscribe/unsubscribe-json-model)| Subscribes on the other user by your own JWT value and login of the other user.|`200`, `400`, `404`
-| DELETE | api/user/subscribe      	  |[UserUnsubscribe model](#usersubscribe/unsubscribe-json-model)| Unsubscribes from the other user by your own JWT value and login of the other user.|`200`, `400`, `404`
 |__OPTIONS__| api/user 			   	  |||`200`
 | HEAD   | api/user 			      |||`200`
 | GET    | api/user     		      || Get all the users.|`200`
@@ -45,6 +33,15 @@ The API consistes of __3 controllers__:
 | DELETE | api/user        	 	      |[User model](#user-json-model)	  | Deletes the user(password and login are required).|`200`, `403`, `404`
 |__OPTIONS__| api/admin-delete 	      |||`200`
 | DELETE | api/user/admin-delete      |[JwtWithUserId model](#jwtwithid-json-model)| Deletes the user by Id. Only for admnistrators!|`200`, `400`, `403`, `404`
+|__OPTIONS__| api/user/subscribe      |||`200`
+| HEAD   | api/user/subscribe 	   	  |`"YourJWTValue"`||`200`, `400`, `404`
+| GET 	 | api/user/subscribe		  |`"YourJWTValue"`| Get your subscriptions(on whom you subscribed) by JWT value.|`200`, `400`, `404`
+| POST   | api/user/subscribe      	  |[UserSubscribe model](#usersubscribe/unsubscribe-json-model)| Subscribes on the other user by your own JWT value and login of the other user.|`200`, `400`, `404`
+| DELETE | api/user/subscribe      	  |[UserUnsubscribe model](#usersubscribe/unsubscribe-json-model)| Unsubscribes from the other user by your own JWT value and login of the other user.|`200`, `400`, `404`
+|__OPTIONS__| api/user/get-subscribers|||`200`
+| HEAD   | api/user/get-subscribers	  |`"YourJWTValue"`||`200`, `400`, `404`
+| GET    | api/user/get-subscribers	  |`"YourJWTValue"`| Get your subscribers(who subscribed on you) by JWT value.|`200`, `400`, `404`
+
 
 
 
@@ -64,12 +61,12 @@ The API consistes of __3 controllers__:
 ## TwitterController(18 methods)
 | Method    | URL | Body | Description | Status codes |
 | :-------: | :-- | :--- | :---------- | :----------- |
+|__OPTIONS__| api/twitter/getByLogin/{login}||||`200`
+| HEAD   | api/twitter/getByLogin/{login}||||`200`, `404`
+| GET    | api/twitter/getByLogin/{login}|| Get all tweets of user with "login".|`200`, `404`
 |__OPTIONS__| api/twitter/getById/{id} 	 |||`200`
 | HEAD   | api/twitter/getById/{id} 	 |||`200`, `400`, `404`
 | GET    | api/twitter/getById/{id}      || Get tweet by "id".|`200`, `400`, `404`
-| OPTIONS| api/twitter/getByLogin/{login}||||`200`
-| HEAD   | api/twitter/getByLogin/{login}||||`200`, `404`
-| GET    | api/twitter/getByLogin/{login}|| Get all tweets of user with "login".|`200`, `404`
 |__OPTIONS__| api/twitter 				 |||`200`
 | HEAD   | api/twitter 					 |`"YourJWTValue"`||`200`, `400`, `404`
 | GET    | api/twitter  				 |`"YourJWTValue"`| Get tweets of your subscriptions(users on whom you've subscribed). JWT required.|`200`, `400`, `404`
@@ -78,10 +75,10 @@ The API consistes of __3 controllers__:
 |__OPTIONS__| api/twitter/comment-tweet  |||`200`
 | POST   | api/twitter/comment-tweet	 |[CommentAdding model](#commentadding-json-model)| Comments selected tweet(by TweetId). JWT required.|`200`, `400`, `404`
 | DELETE | api/twitter/comment-tweet	 |[JwtWithCommentId model](#jwtwithid-json-model) | Delete comment by Id. JWT and TweetId required. Admin can delte any comment.|`200`, `400`, `404`
-|__OPTIONS__| api/twitter/retweet   	 |||`200`
-| POST   | api/twitter/retweet	 		 |[JwtWithTweetId model](#jwtwithid-json-model)	  | Retweet selected tweet to your user. JWT required.|`200`, `400`, `404`
 |__OPTIONS__| api/twitter/rate-tweet   	 |||`200`
 | PUT    | api/twitter/rate-tweet		 |[RatingAdding model](#ratingadding-json-model)  | Rates selected tweet(by TweetId). There are 3 possible rates `"Dislike"`,`"None"`,`"Like"`. JWT required.|`200`, `400`, `404`
+|__OPTIONS__| api/twitter/retweet   	 |||`200`
+| POST   | api/twitter/retweet	 		 |[JwtWithTweetId model](#jwtwithid-json-model)	  | Retweet selected tweet to your user. JWT required.|`200`, `400`, `404`
 
 
 

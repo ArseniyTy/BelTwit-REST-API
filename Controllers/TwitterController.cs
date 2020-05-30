@@ -323,7 +323,7 @@ namespace BelTwit_REST_API.Controllers
         [HttpOptions("retweet")]
         public ActionResult RetweetOptions()
         {
-            Response.Headers.Add("Allow", "GET");
+            Response.Headers.Add("Allow", "POST");
             return Ok();
         }
         [HttpPost("retweet")]
